@@ -4,15 +4,15 @@ public class BTree {
     private BNode root;
     private int order;
 
-    BTree(int order)
-    {
+    BTree(int order) {
         this.order = order;
         this.root = new BNode(this.order);
     }
-    public BNode getRoot()
-    {
+
+    public BNode getRoot() {
         return this.root;
     }
+
     public BNode search(int key) {
         BNode currentNode = root;
         while (currentNode.findAppropriateChild(key) != null) {
@@ -20,38 +20,29 @@ public class BTree {
         }
         return currentNode;
     }
-    public void printTree(BNode root, int level)
-    {
-        if(root == null) return;
+
+    public void printTree(BNode root, int level) {
+        if (root == null) return;
         System.out.println(level);
         root.printElements();
         System.out.print("\n");
         level += 1;
-        if(root.isEmpty())
-        {
-            if(root.getEmptySplitLink() != null)
-            {
+        if (root.isEmpty()) {
+            if (root.getEmptySplitLink() != null) {
                 printTree(root.getEmptySplitLink(), level);
             }
-
-        }
-        else
-        {
-            for(int i=0; i<root.getElementNum(); i++)
-            {
-                if(root.getElementByIndex(i).getLeft() != null)
-                {
+        } else {
+            for (int i = 0; i < root.getElementNum(); i++) {
+                if (root.getElementByIndex(i).getLeft() != null) {
                     printTree(root.getElementByIndex(i).getLeft(), level);
                 }
-
             }
-            if(root.getLast().getRight() != null)
-            {
+            if (root.getLast().getRight() != null) {
                 printTree(root.getLast().getRight(), level);
             }
-
         }
     }
+
     public BNode insert(BNode parent, int key) {
         BNode nextNode = parent.findAppropriateChild(key);
         if (nextNode != null) {
@@ -72,12 +63,15 @@ public class BTree {
                     return rightHalf;
                 } else {
                     parent.addKey(key);
-                    parent.setEmptySplitLink(null);
+                    if (parent.getEmptySplitLink() != null) {
+                        parent.getKey(key).setLeft(parent.getEmptySplitLink());
+                        parent.setEmptySplitLink(null);
+                    }
                     parent.getKey(key).setRight(childSplitNode);
                     BNodeKey nextSmallest = parent.getNextSmallestKey(key);
-                    if(nextSmallest != null) parent.getKey(key).setLeft(nextSmallest.getRight());
+                    if (nextSmallest != null) parent.getKey(key).setLeft(nextSmallest.getRight());
                     BNodeKey nextLargest = parent.getNextLargestKey(key);
-                    if(nextLargest != null) nextLargest.setLeft(childSplitNode);
+                    if (nextLargest != null) nextLargest.setLeft(childSplitNode);
                     return null;
                 }
             } else {
@@ -88,7 +82,6 @@ public class BTree {
                 BNode newRoot = new BNode(order);
                 newRoot.addKey(key);
                 BNode newNode = parent.splitNode(key, null, null);
-                //manually handle the add cases since the newRoot will always have only one element
                 newRoot.getKey(key).setRight(newNode);
                 newRoot.getKey(key).setLeft(parent);
                 root = newRoot;
@@ -104,71 +97,78 @@ public class BTree {
     }
 
     public void delete(int key) {
-        BNode parent = root;
+        BNode parent;
         BNode targetNode = root;
         while (true) {
             parent = targetNode;
-            if(targetNode.findAppropriateChild(key) == null) break;
+            if (targetNode.findAppropriateChild(key) == null) break;
             targetNode = targetNode.findAppropriateChild(key);
-
         }
         if (targetNode.isInternal()) {
-            if (targetNode.getElementNum() == 1) {
-                BNodeKey keyToDelete = targetNode.getKey(key);
-                BNode borrowNode = keyToDelete.getRight();
-                BNodeKey borrowedItem;
-                if (borrowNode != null) {
-                    borrowedItem = borrowNode.getFirst();
-                } else {
-                    borrowNode = keyToDelete.getLeft();
-                    borrowedItem = borrowNode.getLast();
-                }
-                delete(borrowedItem.getKey());
+            // deleting from an internal node requires use to merge branches below the item we are deleting
+            // we should first check that we can merge, otherwise we have to employ different tactics
+            if (canMerge(targetNode.getKey(key).getLeft(), targetNode.getKey(key).getRight())) {
+                BNodeKey elementToDelete = targetNode.getKey(key);
+                BNode first = elementToDelete.getLeft();
+                BNode second = elementToDelete.getRight();
+                BNodeKey precedingKey = targetNode.getNextLargestKey(key);
+                BNodeKey succeedingKey = targetNode.getNextSmallestKey(key);
                 targetNode.delete(key);
-                targetNode.addKey(borrowedItem.getKey());
-            } else {
-                if (canMerge(targetNode.getKey(key).getLeft(), targetNode.getKey(key).getRight())) {
-                    BNodeKey elementToDelete = targetNode.getKey(key);
-                    BNode first = elementToDelete.getLeft();
-                    BNode second = elementToDelete.getRight();
-                    targetNode.delete(key);
-                    targetNode.setChildNode(mergeBranches(first, second));
+                BNode mergedChild = mergeBranches(first, second);
+                if (targetNode.getElementNum() == 1) {
+                    targetNode.setEmptySplitLink(mergedChild);
                 } else {
-                    BNodeKey keyToDelete = targetNode.getKey(key);
-                    BNode borrowNode = keyToDelete.getRight();
-                    int keyToBorrow;
-                    if (borrowNode != null) {
-                        keyToBorrow = borrowNode.getFirst().getKey();
-                    } else {
-                        borrowNode = keyToDelete.getLeft();
-                        keyToBorrow = borrowNode.getLast().getKey();
-                    }
-                    delete(keyToBorrow);
-                    targetNode.delete(key);
-                    targetNode.addKey(keyToBorrow);
+                    if (precedingKey != null) precedingKey.setRight(mergedChild);
+                    if (succeedingKey != null) succeedingKey.setLeft(mergedChild);
                 }
+            } else {
+                int keyToBorrow = borrowAndDelete(targetNode, key);
+                BNodeKey oldKey = targetNode.getKey(key);
+                delete(keyToBorrow);
+                oldKey.setKey(keyToBorrow);
             }
         } else if (targetNode.isLeaf()) {
-            if (targetNode.getElementNum() == 1) {
-                BNodeKey borrowItem = parent.getNextLargestKey(key);
-                delete(borrowItem.getKey());
-                targetNode.delete(key);
-                targetNode.addKey(borrowItem.getKey());
-            } else {
-                targetNode.delete(key);
-            }
+            targetNode.delete(key);
         }
+    }
+
+    public int borrowAndDelete(BNode targetNode, int key) {
+        BNode trackingNode = targetNode.getKey(key).getRight();
+        int keyToBorrow = -1;
+        while (trackingNode != null && !trackingNode.isLeaf()) {
+            if (targetNode.getFirst().getKey() != -1) {
+                break;
+            }
+            trackingNode = trackingNode.getFirst().getLeft();
+        }
+        if (trackingNode != null) {
+            keyToBorrow = trackingNode.getFirst().getKey();
+            if (keyToBorrow != -1)
+                return keyToBorrow;
+        }
+        trackingNode = targetNode.getKey(key).getLeft();
+        while (trackingNode != null && !trackingNode.isLeaf()) {
+            if (targetNode.getLast().getKey() != -1) {
+                break;
+            }
+            trackingNode = trackingNode.getLast().getRight();
+        }
+        if (trackingNode != null) {
+            keyToBorrow = trackingNode.getLast().getKey();
+            if (keyToBorrow != -1)
+                return keyToBorrow;
+        }
+        return keyToBorrow;
     }
 
     //this function determines if the appropriate lower branches can be merged
     public boolean canMerge(BNode first, BNode second) {
-        while(true) {
+        while (first.getLast() != null && second.getFirst() != null) {
             if (first.getElementNum() + second.getElementNum() > order) {
                 return false;
             }
             first = first.getLast().getLeft();
             second = second.getFirst().getRight();
-            if(second == null || first == null) break;
         }
         return true;
     }

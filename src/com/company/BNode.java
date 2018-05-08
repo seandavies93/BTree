@@ -10,24 +10,21 @@ public class BNode {
     BNode(int order) {
         elements = new BNodeKey[order];
         elementNum = 0;
-        for(int i=0; i<order; i++)
-        {
+        for (int i = 0; i < order; i++) {
             elements[i] = new BNodeKey();
         }
         this.order = order;
-        //TODO: use this to deal with the case of an empty split node
         this.emptySplitLink = null;
     }
-    public void setEmptySplitLink(BNode node)
-    {
+
+    public void setEmptySplitLink(BNode node) {
         this.emptySplitLink = node;
     }
 
     //inner method for adding a key into the internal array, without regard for the BTree constraints
     public void addKey(int key) {
         int insertIndex = 0;
-        if(isEmpty())
-        {
+        if (isEmpty()) {
             elements[0].setKey(key);
             elementNum++;
             return;
@@ -36,54 +33,77 @@ public class BNode {
         while (key > elements[insertIndex].getKey() && elements[insertIndex].getKey() != -1) {
             insertIndex++;
         }
-        if(elements[insertIndex].getKey() != -1) {
+        if (elements[insertIndex].getKey() != -1) {
             for (int i = order - 1; i >= insertIndex + 1; i--) {
                 elements[i].setKey(elements[i - 1].getKey());
+                elements[i].setLeft(elements[i - 1].getLeft());
+                elements[i].setRight(elements[i - 1].getRight());
             }
         }
         elements[insertIndex].setKey(key);
         elementNum++;
     }
-    public void printElements(){
-        for(int i=0; i < order; i++)
-        {
-            System.out.print(" "+i+": ");
+
+    public void addKeyFull(BNodeKey key) {
+        int insertIndex = 0;
+        int value = key.getKey();
+        if (isEmpty()) {
+            elements[0] = key;
+            elementNum++;
+            return;
+        }
+
+        while (value > elements[insertIndex].getKey() && elements[insertIndex].getKey() != -1) {
+            insertIndex++;
+        }
+        if (elements[insertIndex].getKey() != -1) {
+            for (int i = order - 1; i >= insertIndex + 1; i--) {
+                elements[i].setKey(elements[i - 1].getKey());
+                elements[i].setLeft(elements[i - 1].getLeft());
+                elements[i].setRight(elements[i - 1].getRight());
+            }
+        }
+        elements[insertIndex] = key;
+        elementNum++;
+    }
+
+    public void printElements() {
+        for (int i = 0; i < order; i++) {
+            System.out.print(" " + i + ": ");
             System.out.print(elements[i].getKey());
         }
     }
+
     //gets the current number of elements inserted into the predetermined array size
     public int getElementNum() {
         return elementNum;
     }
-    public BNode getEmptySplitLink()
-    {
+
+    public BNode getEmptySplitLink() {
         return emptySplitLink;
     }
-    public BNodeKey getElementByIndex(int index)
-    {
+
+    public BNodeKey getElementByIndex(int index) {
         return elements[index];
     }
+
     //finds the appropriate child node to move to given the value
     public BNode findAppropriateChild(int key) {
         int index = 0;
-        if(isEmpty()) return emptySplitLink;
-        if(elements[0].getKey() > key)
-        {
+        if (isEmpty()) return emptySplitLink;
+        if (elements[0].getKey() > key) {
             return elements[0].getLeft();
-        }
-        else if(elements[elementNum - 1].getKey() < key)
-        {
+        } else if (elements[elementNum - 1].getKey() < key) {
             return elements[elementNum - 1].getRight();
         }
-        for(int i = 0; i < elementNum; i++)
-        {
-            if(elements[i].getKey() < key && key < elements[i + 1].getKey())
-            {
+        for (int i = 0; i < elementNum; i++) {
+            if (elements[i].getKey() < key && key < elements[i + 1].getKey()) {
                 return elements[i].getRight();
             }
         }
         return null;
     }
+
     //used to determine if the node has the specified key
     public boolean hasKey(int key) {
         int first = 0;
@@ -106,18 +126,13 @@ public class BNode {
     public void setChildNode(BNode nodeToInsert) {
         int index = 0;
         nodeToInsert.printElements();
-        if(elements[0].getKey() > nodeToInsert.getLast().getKey())
-        {
+        if (elements[0].getKey() > nodeToInsert.getLast().getKey()) {
             elements[0].setLeft(nodeToInsert);
-        }
-        else if(elements[elementNum - 1].getKey() < nodeToInsert.getFirst().getKey())
-        {
+        } else if (elements[elementNum - 1].getKey() < nodeToInsert.getFirst().getKey()) {
             elements[elementNum - 1].setRight(nodeToInsert);
         }
-        for(int i = 0; i < elementNum; i++)
-        {
-            if(elements[i].getKey() < nodeToInsert.getFirst().getKey() && nodeToInsert.getLast().getKey() < elements[i + 1].getKey())
-            {
+        for (int i = 0; i < elementNum; i++) {
+            if (elements[i].getKey() < nodeToInsert.getFirst().getKey() && nodeToInsert.getLast().getKey() < elements[i + 1].getKey()) {
                 elements[i].setRight(nodeToInsert);
                 elements[i + 1].setLeft(nodeToInsert);
             }
@@ -127,22 +142,26 @@ public class BNode {
     public BNode splitNode(int key, BNode leftSplitRightMost, BNode rightSplitLeftMost) {
         BNode newNode = new BNode(order);
         int index = 0;
+        int j = 0;
         int initialNumElements = elementNum;
         while (elements[index].getKey() < key && index < order) {
             index++;
-            if(index==order) break;
+            if (index == order) break;
         }
         for (int i = index; i < initialNumElements; i++) {
-            newNode.addKey(elements[i].getKey());
+            newNode.addKeyFull(elements[i]);
         }
-        if(index < order) {
+        if (index < order) {
+            for (int i = index; i < initialNumElements; i++) {
+                elements[i] = new BNodeKey();
+            }
             while (elements[index].getKey() != -1) {
                 delete(this.elements[index].getKey());
             }
         }
-        if(newNode.isEmpty())newNode.setEmptySplitLink(rightSplitLeftMost);
+        if (newNode.isEmpty()) newNode.setEmptySplitLink(rightSplitLeftMost);
         else newNode.getFirst().setLeft(rightSplitLeftMost);
-        if(this.isEmpty()) this.setEmptySplitLink(leftSplitRightMost);
+        if (this.isEmpty()) this.setEmptySplitLink(leftSplitRightMost);
         else this.getLast().setRight(leftSplitRightMost);
         return newNode;
     }
@@ -157,33 +176,30 @@ public class BNode {
             elements[i].setKey(elements[i + 1].getKey());
         }
         elementNum--;
-        for(int i=elementNum; i < order; i++)
-        {
+        for (int i = elementNum; i < order; i++) {
             elements[i].setKey(-1);
             elements[i].setLeft(null);
             elements[i].setRight(null);
         }
     }
+
     //returns first and last elements
     public BNodeKey getFirst() {
-        if(elementNum != 0)
-        {
+        if (elementNum != 0) {
             return elements[0];
         }
         return null;
     }
 
-    public BNodeKey getLast(){
-        if(elementNum != 0)
-        {
+    public BNodeKey getLast() {
+        if (elementNum != 0) {
             return elements[elementNum - 1];
         }
         return null;
     }
 
     public BNode mergeWithNode(BNode otherNode) {
-        for(int i=0; i<elementNum; i++)
-        {
+        for (int i = 0; i < elementNum; i++) {
             otherNode.addKey(elements[i].getKey());
         }
         elementNum = elementNum + otherNode.getElementNum();
@@ -194,8 +210,8 @@ public class BNode {
         int i = 0;
 
         while (key >= elements[i].getKey() && elements[i].getKey() != -1) {
+            if (i == elementNum - 1) return null;
             i++;
-            if(i == elementNum - 1) return null;
         }
         return elements[i];
     }
@@ -205,11 +221,11 @@ public class BNode {
         while (key > elements[i].getKey()) {
             i++;
         }
-        if(i == 0) return null;
+        if (i == 0) return null;
         return elements[i - 1];
     }
 
-    public int getIndexOfKey(int key){
+    public int getIndexOfKey(int key) {
         int first = 0;
         int last = elementNum - 1;
         int middle = (first + last) / 2;
@@ -226,8 +242,8 @@ public class BNode {
         }
         return -1;
     }
-    public BNodeKey getKey(int key)
-    {
+
+    public BNodeKey getKey(int key) {
 
         int i = 0;
         while (i < order) {
@@ -238,39 +254,34 @@ public class BNode {
         }
         return null;
     }
-    public boolean isLeaf()
-    {
-        for(int i=0; i<order; i++)
-        {
-            if(elements[i].getLeft() != null && elements[i].getRight() != null)
-            {
+
+    public boolean isLeaf() {
+        for (int i = 0; i < order; i++) {
+            if (elements[i].getLeft() != null && elements[i].getRight() != null) {
                 return false;
             }
         }
         return true;
     }
-    public boolean isInternal()
-    {
-        for(int i=0; i<order; i++)
-        {
-            if(elements[i].getRight() != null && elements[i].getLeft() != null)
-            {
+
+    public boolean isInternal() {
+        for (int i = 0; i < order; i++) {
+            if (elements[i].getRight() != null && elements[i].getLeft() != null) {
                 return true;
             }
         }
         return false;
     }
-    public boolean isFull()
-    {
-        if(elementNum == order)
-        {
+
+    public boolean isFull() {
+        if (elementNum == order) {
             return true;
         }
         return false;
     }
-    public boolean isEmpty()
-    {
-        if(elementNum == 0){
+
+    public boolean isEmpty() {
+        if (elementNum == 0) {
             return true;
         }
         return false;
