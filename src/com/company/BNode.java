@@ -139,31 +139,69 @@ public class BNode {
         }
     }
 
-    public BNode splitNode(int key, BNode leftSplitRightMost, BNode rightSplitLeftMost) {
+    public int getMedian(int key) {
+        int[] keys = new int[order + 1];
+        int i = 0;
+        while (elements[i].getKey() < key && i < order) {
+            keys[i] = elements[i].getKey();
+            i++;
+        }
+        keys[i] = key;
+        i++;
+        while (i < order + 1) {
+            keys[i] = elements[i - 1].getKey();
+            i++;
+        }
+        return keys[(order + 1) / 2];
+    }
+
+    public BNode splitNode(BNodeKey key) {
         BNode newNode = new BNode(order);
         int index = 0;
-        int j = 0;
         int initialNumElements = elementNum;
-        while (elements[index].getKey() < key && index < order) {
+        int median = getMedian(key.getKey());
+        while (elements[index].getKey() < median && index < order) {
             index++;
             if (index == order) break;
         }
         for (int i = index; i < initialNumElements; i++) {
-            newNode.addKeyFull(elements[i]);
-        }
-        if (index < order) {
-            for (int i = index; i < initialNumElements; i++) {
+            if (elements[i].getKey() == median) {
+                elements[i] = new BNodeKey();
+            } else {
+                newNode.addKeyFull(elements[i]);
                 elements[i] = new BNodeKey();
             }
-            while (elements[index].getKey() != -1) {
-                delete(this.elements[index].getKey());
+
+        }
+        this.elementNum = index;
+        return newNode;
+    }
+
+    public void addKeyFromSplit(BNodeKey key) {
+        int insertIndex = 0;
+        int value = key.getKey();
+        if (isEmpty()) {
+            elements[0] = key;
+            elementNum++;
+            return;
+        }
+
+        while (value > elements[insertIndex].getKey() && elements[insertIndex].getKey() != -1) {
+            insertIndex++;
+        }
+        if (elements[insertIndex].getKey() != -1) {
+            for (int i = order - 1; i >= insertIndex + 1; i--) {
+                elements[i].setKey(elements[i - 1].getKey());
+                elements[i].setLeft(elements[i - 1].getLeft());
+                elements[i].setRight(elements[i - 1].getRight());
             }
         }
-        if (newNode.isEmpty()) newNode.setEmptySplitLink(rightSplitLeftMost);
-        else newNode.getFirst().setLeft(rightSplitLeftMost);
-        if (this.isEmpty()) this.setEmptySplitLink(leftSplitRightMost);
-        else this.getLast().setRight(leftSplitRightMost);
-        return newNode;
+        elements[insertIndex] = key;
+        elementNum++;
+        BNodeKey nextSmallest = this.getNextSmallestKey(value);
+        if (nextSmallest != null) nextSmallest.setRight(key.getLeft());
+        BNodeKey nextLargest = this.getNextLargestKey(value);
+        if (nextLargest != null) nextLargest.setLeft(key.getRight());
     }
 
     public void setElementNum(int elementNum) {

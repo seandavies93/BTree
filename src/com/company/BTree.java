@@ -43,52 +43,82 @@ public class BTree {
         }
     }
 
-    public BNode insert(BNode parent, int key) {
-        BNode nextNode = parent.findAppropriateChild(key);
-        if (nextNode != null) {
-            BNode childSplitNode = insert(nextNode, key);
-            if (childSplitNode != null) {
-                if ((parent == root) && (parent.isFull())) {
+//splitNode should have responsibility for finding the median in this code
+//addKeyFromSplit adds the full BNodeKey and handles all the relevant child links that should be updated
+
+    public BNodeKey insert(BNode parent, int key) {
+        BNode current = parent.findAppropriateChild(key);
+        if (current != null) {
+            BNodeKey splitFromBelow = insert(current, key);
+            if (splitFromBelow != null) {
+                if (parent.isFull() && parent == root) {
+                    int median = parent.getMedian(splitFromBelow.getKey());
+                    BNode rightSplit = parent.splitNode(splitFromBelow);
+                    BNodeKey toAdd = new BNodeKey();
                     BNode newRoot = new BNode(order);
-                    newRoot.addKey(key);
-                    BNode link = new BNode(order);
-                    BNode newNode = parent.splitNode(key, link, childSplitNode);
-                    newRoot.getKey(key).setRight(newNode);
-                    newRoot.getKey(key).setLeft(parent);
+                    toAdd.setKey(median);
+                    toAdd.setLeft(parent);
+                    toAdd.setRight(rightSplit);
+                    if (parent.getElementNum() < 2) {
+                        parent.addKeyFromSplit(splitFromBelow);
+                    } else {
+                        rightSplit.addKeyFromSplit(splitFromBelow);
+                    }
+                    newRoot.addKeyFromSplit(toAdd);
                     root = newRoot;
                     return null;
                 } else if (parent.isFull()) {
-                    BNode link = parent.findAppropriateChild(key);
-                    BNode rightHalf = parent.splitNode(key, link, childSplitNode);
-                    return rightHalf;
-                } else {
-                    parent.addKey(key);
-                    if (parent.getEmptySplitLink() != null) {
-                        parent.getKey(key).setLeft(parent.getEmptySplitLink());
-                        parent.setEmptySplitLink(null);
+                    int median = parent.getMedian(splitFromBelow.getKey());
+                    BNode rightSplit = parent.splitNode(splitFromBelow); // perhaps the median should be found in this method, so that the key can also be added
+                    BNodeKey toReturn = new BNodeKey();
+                    toReturn.setKey(median);
+                    toReturn.setLeft(parent);
+                    toReturn.setRight(rightSplit);
+                    if (parent.getElementNum() < 2) {
+                        parent.addKeyFromSplit(splitFromBelow);
+                    } else {
+                        rightSplit.addKeyFromSplit(splitFromBelow);
                     }
-                    parent.getKey(key).setRight(childSplitNode);
-                    BNodeKey nextSmallest = parent.getNextSmallestKey(key);
-                    if (nextSmallest != null) parent.getKey(key).setLeft(nextSmallest.getRight());
-                    BNodeKey nextLargest = parent.getNextLargestKey(key);
-                    if (nextLargest != null) nextLargest.setLeft(childSplitNode);
+                    return toReturn;
+                } else {
+                    parent.addKeyFromSplit(splitFromBelow);
                     return null;
                 }
             } else {
                 return null;
             }
         } else {
-            if ((parent == root) && (parent.isFull())) {
+            if (parent.isFull() && parent == root) {
+                BNodeKey toAdd = new BNodeKey();
                 BNode newRoot = new BNode(order);
-                newRoot.addKey(key);
-                BNode newNode = parent.splitNode(key, null, null);
-                newRoot.getKey(key).setRight(newNode);
-                newRoot.getKey(key).setLeft(parent);
+                int median = parent.getMedian(key);
+                toAdd.setKey(median);
+                BNode rightSplit = parent.splitNode(toAdd);
+                toAdd.setLeft(parent);
+                toAdd.setRight(rightSplit);
+                newRoot.addKeyFromSplit(toAdd);
+                if (parent.getElementNum() < 2) {
+                    parent.addKey(key);
+                } else {
+                    rightSplit.addKey(key);
+                }
                 root = newRoot;
                 return null;
             } else if (parent.isFull()) {
-                BNode rightHalf = parent.splitNode(key, null, null);
-                return rightHalf;
+                int median = parent.getMedian(key);
+                BNodeKey newKey = new BNodeKey();
+                newKey.setKey(key);
+                BNode rightSplit = parent.splitNode(newKey); // perhaps the median should be found in this method, so that the key can also be added
+                BNodeKey toReturn = new BNodeKey();
+                toReturn.setKey(median);
+                toReturn.setLeft(parent);
+                toReturn.setRight(rightSplit);
+                if (parent.getElementNum() < 2) {
+                    parent.addKey(key);
+                } else {
+                    rightSplit.addKey(key);
+                }
+                return toReturn;
             } else {
                 parent.addKey(key);
                 return null;
