@@ -4,12 +4,6 @@ public class Main {
 
     public static void main(String[] args) {
         BTree treeTest = new BTree(4);
-	    /*
-	    treeTest.getRoot().addKey(3);
-	    treeTest.getRoot().addKey(4);
-	    treeTest.getRoot().addKey(5);
-	    treeTest.getRoot().addKey(6);
-	    */
 
         System.out.print("State:\n");
         treeTest.printTree(treeTest.getRoot(), 0);
@@ -41,6 +35,9 @@ public class Main {
         System.out.print("State:\n");
         treeTest.printTree(treeTest.getRoot(), 0);
         treeTest.insert(treeTest.getRoot(), 50);
+        System.out.print("State:\n");
+        treeTest.printTree(treeTest.getRoot(), 0);
+        treeTest.insert(treeTest.getRoot(), 93);
         System.out.print("State:\n");
         treeTest.printTree(treeTest.getRoot(), 0);
 

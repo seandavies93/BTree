@@ -11,6 +11,12 @@ public class BNodeKey {
         this.key = -1;
     }
 
+    BNodeKey(BNode left, BNode right, int key) {
+        this.leftNode = left;
+        this.rightNode = right;
+        this.key = key;
+    }
+
     public void setLeft(BNode left) {
         this.leftNode = left;
     }

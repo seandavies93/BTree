@@ -43,8 +43,6 @@ public class BTree {
         }
     }
 
-//splitNode should have responsibility for finding the median in this code
-//addKeyFromSplit adds the full BNodeKey and handles all the relevant child links that should be updated
 
     public BNodeKey insert(BNode parent, int key) {
         BNode current = parent.findAppropriateChild(key);
@@ -54,11 +52,8 @@ public class BTree {
                 if (parent.isFull() && parent == root) {
                     int median = parent.getMedian(splitFromBelow.getKey());
                     BNode rightSplit = parent.splitNode(splitFromBelow);
-                    BNodeKey toAdd = new BNodeKey();
+                    BNodeKey toAdd = new BNodeKey(parent, rightSplit, median);
                     BNode newRoot = new BNode(order);
-                    toAdd.setKey(median);
-                    toAdd.setLeft(parent);
-                    toAdd.setRight(rightSplit);
                     if (parent.getElementNum() < 2) {
                         parent.addKeyFromSplit(splitFromBelow);
                     } else {
@@ -69,11 +64,8 @@ public class BTree {
                     return null;
                 } else if (parent.isFull()) {
                     int median = parent.getMedian(splitFromBelow.getKey());
-                    BNode rightSplit = parent.splitNode(splitFromBelow); // perhaps the median should be found in this method, so that the key can also be added
-                    BNodeKey toReturn = new BNodeKey();
-                    toReturn.setKey(median);
-                    toReturn.setLeft(parent);
-                    toReturn.setRight(rightSplit);
+                    BNode rightSplit = parent.splitNode(splitFromBelow);
+                    BNodeKey toReturn = new BNodeKey(parent, rightSplit, median);
                     if (parent.getElementNum() < 2) {
                         parent.addKeyFromSplit(splitFromBelow);
                     } else {

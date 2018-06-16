@@ -17,6 +17,7 @@ public class BNode {
         this.emptySplitLink = null;
     }
 
+
     public void setEmptySplitLink(BNode node) {
         this.emptySplitLink = node;
     }
