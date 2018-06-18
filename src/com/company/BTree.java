@@ -85,10 +85,7 @@ public class BTree {
                 BNodeKey newKey = new BNodeKey();
                 newKey.setKey(key);
                 BNode rightSplit = parent.splitNode(newKey); // perhaps the median should be found in this method, so that the key can also be added
-                BNodeKey toReturn = new BNodeKey();
-                toReturn.setKey(median);
-                toReturn.setLeft(parent);
-                toReturn.setRight(rightSplit);
+                BNodeKey toReturn = new BNodeKey(parent, rightSplit, median);
                 return toReturn;
             } else {
                 parent.addKey(key);
