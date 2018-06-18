@@ -27,11 +27,7 @@ public class BTree {
         root.printElements();
         System.out.print("\n");
         level += 1;
-        if (root.isEmpty()) {
-            if (root.getEmptySplitLink() != null) {
-                printTree(root.getEmptySplitLink(), level);
-            }
-        } else {
+        if (!root.isEmpty()) {
             for (int i = 0; i < root.getElementNum(); i++) {
                 if (root.getElementByIndex(i).getLeft() != null) {
                     printTree(root.getElementByIndex(i).getLeft(), level);
@@ -114,7 +110,7 @@ public class BTree {
                 targetNode.delete(key);
                 BNode mergedChild = mergeBranches(first, second);
                 if (targetNode.getElementNum() == 1) {
-                    targetNode.setEmptySplitLink(mergedChild);
+                    //targetNode.setEmptySplitLink(mergedChild);
                 } else {
                     if (precedingKey != null) precedingKey.setRight(mergedChild);
                     if (succeedingKey != null) succeedingKey.setLeft(mergedChild);

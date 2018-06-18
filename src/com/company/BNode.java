@@ -73,10 +73,6 @@ public class BNode {
         return elementNum;
     }
 
-    public BNode getEmptySplitLink() {
-        return emptySplitLink;
-    }
-
     public BNodeKey getElementByIndex(int index) {
         return elements[index];
     }
@@ -84,7 +80,7 @@ public class BNode {
     //finds the appropriate child node to move to given the value
     public BNode findAppropriateChild(int key) {
         int index = 0;
-        if (isEmpty()) return emptySplitLink;
+        if (isEmpty()) return null;
         if (elements[0].getKey() > key) {
             return elements[0].getLeft();
         } else if (elements[elementNum - 1].getKey() < key) {
