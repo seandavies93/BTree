@@ -4,7 +4,6 @@ public class BNode {
     private int order;
     private int elementNum;
     private BNodeKey[] elements;
-    private BNode emptySplitLink;
 
     //constructor
     BNode(int order) {
@@ -14,12 +13,6 @@ public class BNode {
             elements[i] = new BNodeKey();
         }
         this.order = order;
-        this.emptySplitLink = null;
-    }
-
-
-    public void setEmptySplitLink(BNode node) {
-        this.emptySplitLink = node;
     }
 
     //inner method for adding a key into the internal array, without regard for the BTree constraints
