@@ -54,11 +54,6 @@ public class BTree {
                     BNode rightSplit = parent.splitNode(splitFromBelow);
                     BNodeKey toAdd = new BNodeKey(parent, rightSplit, median);
                     BNode newRoot = new BNode(order);
-                    if (parent.getElementNum() < 2) {
-                        parent.addKeyFromSplit(splitFromBelow);
-                    } else {
-                        rightSplit.addKeyFromSplit(splitFromBelow);
-                    }
                     newRoot.addKeyFromSplit(toAdd);
                     root = newRoot;
                     return null;
@@ -66,11 +61,6 @@ public class BTree {
                     int median = parent.getMedian(splitFromBelow.getKey());
                     BNode rightSplit = parent.splitNode(splitFromBelow);
                     BNodeKey toReturn = new BNodeKey(parent, rightSplit, median);
-                    if (parent.getElementNum() < 2) {
-                        parent.addKeyFromSplit(splitFromBelow);
-                    } else {
-                        rightSplit.addKeyFromSplit(splitFromBelow);
-                    }
                     return toReturn;
                 } else {
                     parent.addKeyFromSplit(splitFromBelow);
@@ -84,16 +74,10 @@ public class BTree {
                 BNodeKey toAdd = new BNodeKey();
                 BNode newRoot = new BNode(order);
                 int median = parent.getMedian(key);
-                toAdd.setKey(median);
+                toAdd.setKey(key);
                 BNode rightSplit = parent.splitNode(toAdd);
-                toAdd.setLeft(parent);
-                toAdd.setRight(rightSplit);
-                newRoot.addKeyFromSplit(toAdd);
-                if (parent.getElementNum() < 2) {
-                    parent.addKey(key);
-                } else {
-                    rightSplit.addKey(key);
-                }
+                BNodeKey forRoot = new BNodeKey(parent, rightSplit, median);
+                newRoot.addKeyFromSplit(forRoot);
                 root = newRoot;
                 return null;
             } else if (parent.isFull()) {
@@ -105,11 +89,6 @@ public class BTree {
                 toReturn.setKey(median);
                 toReturn.setLeft(parent);
                 toReturn.setRight(rightSplit);
-                if (parent.getElementNum() < 2) {
-                    parent.addKey(key);
-                } else {
-                    rightSplit.addKey(key);
-                }
                 return toReturn;
             } else {
                 parent.addKey(key);
