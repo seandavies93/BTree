@@ -99,31 +99,33 @@ public class BTree {
             targetNode = targetNode.findAppropriateChild(key);
         }
         if (targetNode.isInternal()) {
-            // deleting from an internal node requires use to merge branches below the item we are deleting
-            // we should first check that we can merge, otherwise we have to employ different tactics
+            int keyToBorrow = borrowAndDelete(targetNode, key);
+            BNodeKey oldKey = targetNode.getKey(key);
             if (canMerge(targetNode.getKey(key).getLeft(), targetNode.getKey(key).getRight())) {
-                BNodeKey elementToDelete = targetNode.getKey(key);
-                BNode first = elementToDelete.getLeft();
-                BNode second = elementToDelete.getRight();
+                BNode first = oldKey.getLeft();
+                BNode second = oldKey.getRight();
                 BNodeKey precedingKey = targetNode.getNextLargestKey(key);
                 BNodeKey succeedingKey = targetNode.getNextSmallestKey(key);
-                targetNode.delete(key);
-                BNode mergedChild = mergeBranches(first, second);
                 if (targetNode.getElementNum() < this.order / 2) {
-                    // borrow an item from elsewhere in the tree
+                    delete(keyToBorrow);
+                    oldKey.setKey(keyToBorrow);
                 } else {
+                    targetNode.delete(key);
+                    BNode mergedChild = mergeBranches(first, second);
                     if (precedingKey != null) precedingKey.setRight(mergedChild);
                     if (succeedingKey != null) succeedingKey.setLeft(mergedChild);
                 }
             } else {
-                int keyToBorrow = borrowAndDelete(targetNode, key);
-                BNodeKey oldKey = targetNode.getKey(key);
                 delete(keyToBorrow);
                 oldKey.setKey(keyToBorrow);
             }
         } else if (targetNode.isLeaf()) {
             if(targetNode.getElementNum() < this.order / 2) {
-
+                BNodeKey toDelete = parent.getNextLargestKey(key);
+                if(toDelete == null) toDelete = parent.getNextSmallestKey(key);
+                delete(toDelete.getKey());
+                targetNode.addKey(toDelete.getKey());
+                targetNode.delete(key);
             } else {
                 targetNode.delete(key);
             }
