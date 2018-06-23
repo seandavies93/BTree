@@ -161,6 +161,7 @@ public class BTree {
         return keyToBorrow;
     }
 
+    // can use this to determine if the merge technique can be used to delete before descending to the target node in the delete function
     public boolean canDeleteByMerge(BNode root, int key) {
         BNode targetNode = root;
         while (true) {
@@ -168,6 +169,16 @@ public class BTree {
             targetNode = targetNode.findAppropriateChild(key);
         }
         return canMerge(targetNode.getKey(key).getLeft(), targetNode.getKey(key).getRight());
+    }
+
+    // used to determine if we should borrow from above since the targetNode is a leaf node
+    public boolean isTargetNodeALeaf(BNode root, int key) {
+        BNode targetNode = root;
+        while (true) {
+            if (targetNode.findAppropriateChild(key) == null) break;
+            targetNode = targetNode.findAppropriateChild(key);
+        }
+        return targetNode.isLeaf();
     }
 
     //this function determines if the appropriate lower branches can be merged
