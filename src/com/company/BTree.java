@@ -138,9 +138,6 @@ public class BTree {
         BNode trackingNode = targetNode.getKey(key).getRight();
         int keyToBorrow = -1;
         while (trackingNode != null && !trackingNode.isLeaf()) {
-            if (targetNode.getFirst().getKey() != -1) {
-                break;
-            }
             trackingNode = trackingNode.getFirst().getLeft();
         }
         if (trackingNode != null) {
@@ -150,9 +147,6 @@ public class BTree {
         }
         trackingNode = targetNode.getKey(key).getLeft();
         while (trackingNode != null && !trackingNode.isLeaf()) {
-            if (targetNode.getLast().getKey() != -1) {
-                break;
-            }
             trackingNode = trackingNode.getLast().getRight();
         }
         if (trackingNode != null) {
