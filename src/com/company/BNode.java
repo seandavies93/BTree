@@ -164,7 +164,7 @@ public class BNode {
 
         }
         this.elementNum = index;
-        if (this.getElementNum() < 2) {
+        if (this.getElementNum() < this.order / 2) {
             if(!this.isLeaf()) this.addKeyFromSplit(key);
             else this.addKey(key.getKey());
         } else {

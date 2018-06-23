@@ -109,8 +109,8 @@ public class BTree {
                 BNodeKey succeedingKey = targetNode.getNextSmallestKey(key);
                 targetNode.delete(key);
                 BNode mergedChild = mergeBranches(first, second);
-                if (targetNode.getElementNum() == 1) {
-                    //targetNode.setEmptySplitLink(mergedChild);
+                if (targetNode.getElementNum() < this.order / 2) {
+                    // borrow an item from elsewhere in the tree
                 } else {
                     if (precedingKey != null) precedingKey.setRight(mergedChild);
                     if (succeedingKey != null) succeedingKey.setLeft(mergedChild);
