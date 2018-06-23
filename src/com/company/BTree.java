@@ -122,10 +122,16 @@ public class BTree {
                 oldKey.setKey(keyToBorrow);
             }
         } else if (targetNode.isLeaf()) {
-            targetNode.delete(key);
+            if(targetNode.getElementNum() < this.order / 2) {
+
+            } else {
+                targetNode.delete(key);
+            }
+
         }
     }
 
+    // finds an appropriate element to borrow from another place in the tree
     public int borrowAndDelete(BNode targetNode, int key) {
         BNode trackingNode = targetNode.getKey(key).getRight();
         int keyToBorrow = -1;
@@ -153,6 +159,15 @@ public class BTree {
                 return keyToBorrow;
         }
         return keyToBorrow;
+    }
+
+    public boolean canDeleteByMerge(BNode root, int key) {
+        BNode targetNode = root;
+        while (true) {
+            if (targetNode.findAppropriateChild(key) == null) break;
+            targetNode = targetNode.findAppropriateChild(key);
+        }
+        return canMerge(targetNode.getKey(key).getLeft(), targetNode.getKey(key).getRight());
     }
 
     //this function determines if the appropriate lower branches can be merged
