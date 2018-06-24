@@ -106,7 +106,7 @@ public class BTree {
                 BNode second = oldKey.getRight();
                 BNodeKey precedingKey = targetNode.getNextLargestKey(key);
                 BNodeKey succeedingKey = targetNode.getNextSmallestKey(key);
-                if (targetNode.getElementNum() < this.order / 2) {
+                if (targetNode.getElementNum() <= this.order / 2) {
                     delete(keyToBorrow);
                     oldKey.setKey(keyToBorrow);
                 } else {
@@ -120,7 +120,7 @@ public class BTree {
                 oldKey.setKey(keyToBorrow);
             }
         } else if (targetNode.isLeaf()) {
-            if(targetNode.getElementNum() < this.order / 2) {
+            if(targetNode.getElementNum() <= this.order / 2) {
                 BNodeKey toDelete = parent.getNextLargestKey(key);
                 if(toDelete == null) toDelete = parent.getNextSmallestKey(key);
                 delete(toDelete.getKey());
