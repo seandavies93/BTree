@@ -91,11 +91,10 @@ public class BTree {
     }
 
     public void delete(int key) {
-        BNode parent;
+        BNode parent =root;
         BNode targetNode = root;
-        while (true) {
+        while(targetNode.findAppropriateChild(key) != null) {
             parent = targetNode;
-            if (targetNode.findAppropriateChild(key) == null) break;
             targetNode = targetNode.findAppropriateChild(key);
         }
         if (targetNode.isInternal()) {
@@ -106,7 +105,7 @@ public class BTree {
                 BNode second = oldKey.getRight();
                 BNodeKey precedingKey = targetNode.getNextLargestKey(key);
                 BNodeKey succeedingKey = targetNode.getNextSmallestKey(key);
-                if (targetNode.getElementNum() <= this.order / 2) {
+                if (targetNode != root && targetNode.getElementNum() <= this.order / 2) {
                     delete(keyToBorrow);
                     oldKey.setKey(keyToBorrow);
                 } else {
@@ -120,12 +119,39 @@ public class BTree {
                 oldKey.setKey(keyToBorrow);
             }
         } else if (targetNode.isLeaf()) {
+            BNodeKey precedingKey = parent.getNextSmallestKey(key);
+            BNodeKey succeedingKey = parent.getNextLargestKey(key);
             if(targetNode.getElementNum() <= this.order / 2) {
-                BNodeKey toDelete = parent.getNextLargestKey(key);
-                if(toDelete == null) toDelete = parent.getNextSmallestKey(key);
-                delete(toDelete.getKey());
-                targetNode.addKey(toDelete.getKey());
-                targetNode.delete(key);
+
+                if(precedingKey != null) {
+                    if (precedingKey.getLeft().getElementNum() + targetNode.getElementNum() <= this.order) {
+                        int replacementKey = precedingKey.getKey();
+                        delete(replacementKey);
+                        targetNode.delete(key);
+                        targetNode.addKey(replacementKey);
+                    } else {
+                        int parentKey = precedingKey.getKey();
+                        int borrowKey = precedingKey.getLeft().getLast().getKey();
+                        precedingKey.getLeft().delete(borrowKey);
+                        precedingKey.setKey(borrowKey);
+                        targetNode.getKey(key).setKey(parentKey);
+                    }
+                    return;
+                }
+                if (succeedingKey != null) {
+                    if (succeedingKey.getRight().getElementNum() + targetNode.getElementNum() <= this.order) {
+                        int replacementKey = succeedingKey.getKey();
+                        delete(replacementKey);
+                        succeedingKey.getRight().delete(key);
+                        succeedingKey.getRight().addKey(replacementKey);
+                    } else {
+                        int parentKey = succeedingKey.getKey();
+                        int borrowKey = succeedingKey.getRight().getFirst().getKey();
+                        succeedingKey.getRight().delete(borrowKey);
+                        succeedingKey.setKey(borrowKey);
+                        targetNode.getKey(key).setKey(parentKey);
+                    }
+                }
             } else {
                 targetNode.delete(key);
             }
@@ -185,6 +211,7 @@ public class BTree {
             }
             first = first.getLast().getLeft();
             second = second.getFirst().getRight();
+            if(first == null || second == null) break;
         }
         return true;
     }

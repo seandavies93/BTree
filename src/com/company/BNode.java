@@ -253,7 +253,7 @@ public class BNode {
 
     public BNodeKey getNextSmallestKey(int key) {
         int i = 0;
-        while (key > elements[i].getKey()) {
+        while (key > elements[i].getKey() && elements[i].getKey() != -1) {
             i++;
         }
         if (i == 0) return null;

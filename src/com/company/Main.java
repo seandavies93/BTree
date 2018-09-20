@@ -40,6 +40,13 @@ public class Main {
         treeTest.insert(treeTest.getRoot(), 93);
         System.out.print("State:\n");
         treeTest.printTree(treeTest.getRoot(), 0);
-
+        treeTest.delete(93);
+        treeTest.printTree(treeTest.getRoot(), 0);
+        treeTest.delete(98);
+        treeTest.printTree(treeTest.getRoot(), 0);
+        treeTest.delete(101);
+        treeTest.printTree(treeTest.getRoot(), 0);
+        treeTest.delete(140);
+        treeTest.printTree(treeTest.getRoot(), 0);
     }
 }
