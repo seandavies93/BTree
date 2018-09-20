@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5c8bb57b-2249-40b5-91d4-ea319477f522" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/out/production/BTreeTest/com/company/BTree.class" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/out/production/BTreeTest/com/company/Main.class" afterPath="$PROJECT_DIR$/out/production/BTreeTest/com/company/Main.class" />
-      <change beforePath="$PROJECT_DIR$/src/com/company/BNode.java" afterPath="$PROJECT_DIR$/src/com/company/BNode.java" />
-      <change beforePath="$PROJECT_DIR$/src/com/company/BTree.java" afterPath="$PROJECT_DIR$/src/com/company/BTree.java" />
-      <change beforePath="$PROJECT_DIR$/src/com/company/Main.java" afterPath="$PROJECT_DIR$/src/com/company/Main.java" />
-    </list>
+    <list default="true" id="5c8bb57b-2249-40b5-91d4-ea319477f522" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,8 +15,8 @@
       <file leaf-file-name="BTree.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/company/BTree.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="372">
-              <caret line="48" column="75" lean-forward="true" selection-start-line="48" selection-start-column="75" selection-end-line="48" selection-end-column="75" />
+            <state relative-caret-position="338">
+              <caret line="46" column="41" lean-forward="true" selection-start-line="46" selection-start-column="41" selection-end-line="46" selection-end-column="41" />
               <folding>
                 <element signature="e#219#220#0" expanded="true" />
                 <element signature="e#251#252#0" expanded="true" />
@@ -983,8 +976,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/company/BTree.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="372">
-          <caret line="48" column="75" lean-forward="true" selection-start-line="48" selection-start-column="75" selection-end-line="48" selection-end-column="75" />
+        <state relative-caret-position="338">
+          <caret line="46" column="41" lean-forward="true" selection-start-line="46" selection-start-column="41" selection-end-line="46" selection-end-column="41" />
           <folding>
             <element signature="e#219#220#0" expanded="true" />
             <element signature="e#251#252#0" expanded="true" />
