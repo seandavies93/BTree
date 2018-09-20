@@ -41,12 +41,16 @@ public class Main {
         System.out.print("State:\n");
         treeTest.printTree(treeTest.getRoot(), 0);
         treeTest.delete(93);
+        System.out.print("State:\n");
         treeTest.printTree(treeTest.getRoot(), 0);
         treeTest.delete(98);
+        System.out.print("State:\n");
         treeTest.printTree(treeTest.getRoot(), 0);
         treeTest.delete(101);
+        System.out.print("State:\n");
         treeTest.printTree(treeTest.getRoot(), 0);
         treeTest.delete(140);
+        System.out.print("State:\n");
         treeTest.printTree(treeTest.getRoot(), 0);
     }
 }

@@ -111,7 +111,7 @@ public class BTree {
                 } else {
                     targetNode.delete(key);
                     BNode mergedChild = mergeBranches(first, second);
-                    if(targetNode == root) {
+                    if(targetNode == root && targetNode.getElementNum() == this.order / 2) {
                         root = mergedChild;
                         return;
                     }
