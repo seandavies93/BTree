@@ -111,6 +111,10 @@ public class BTree {
                 } else {
                     targetNode.delete(key);
                     BNode mergedChild = mergeBranches(first, second);
+                    if(targetNode == root) {
+                        root = mergedChild;
+                        return;
+                    }
                     if (precedingKey != null) precedingKey.setRight(mergedChild);
                     if (succeedingKey != null) succeedingKey.setLeft(mergedChild);
                 }
