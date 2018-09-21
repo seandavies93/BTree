@@ -104,7 +104,7 @@ public class BTree {
             BNode second = oldKey.getRight();
             BNodeKey precedingKey = targetNode.getNextLargestKey(key);
             BNodeKey succeedingKey = targetNode.getNextSmallestKey(key);
-            if(targetNode.getElementNum() > 1) {
+            if(targetNode.getElementNum() == 1) {
                 targetNode.delete(key);
                 BNode mergedChild = mergeBranches(first, second);
                 root = mergedChild;
