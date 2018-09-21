@@ -129,10 +129,10 @@ public class BTree {
                     if (precedingKey != null) precedingKey.setRight(mergedChild);
                     if (succeedingKey != null) succeedingKey.setLeft(mergedChild);
                 }
-            } else {
+         } else {
                 delete(keyToBorrow);
                 oldKey.setKey(keyToBorrow);
-            }
+         }
         } else if (targetNode.isLeaf()) {
             BNodeKey precedingKey = parent.getNextSmallestKey(key);
             BNodeKey succeedingKey = parent.getNextLargestKey(key);
