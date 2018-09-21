@@ -97,21 +97,36 @@ public class BTree {
             parent = targetNode;
             targetNode = targetNode.findAppropriateChild(key);
         }
-        if (targetNode.isInternal()) {
-            int keyToBorrow = borrowAndDelete(targetNode, key);
-            BNodeKey oldKey = targetNode.getKey(key);
+        int keyToBorrow = borrowAndDelete(targetNode, key);
+        BNodeKey oldKey = targetNode.getKey(key);
+        if(targetNode == root) {
+            BNode first = oldKey.getLeft();
+            BNode second = oldKey.getRight();
+            BNodeKey precedingKey = targetNode.getNextLargestKey(key);
+            BNodeKey succeedingKey = targetNode.getNextSmallestKey(key);
+            if(targetNode.getElementNum() > 1) {
+                targetNode.delete(key);
+                BNode mergedChild = mergeBranches(first, second);
+                root = mergedChild;
+            } else {
+                targetNode.delete(key);
+                BNode mergedChild = mergeBranches(first, second);
+                if (precedingKey != null) precedingKey.setRight(mergedChild);
+                if (succeedingKey != null) succeedingKey.setLeft(mergedChild);
+            }
+        } else if (targetNode.isInternal()) {
             if (canMerge(targetNode.getKey(key).getLeft(), targetNode.getKey(key).getRight())) {
                 BNode first = oldKey.getLeft();
                 BNode second = oldKey.getRight();
                 BNodeKey precedingKey = targetNode.getNextLargestKey(key);
                 BNodeKey succeedingKey = targetNode.getNextSmallestKey(key);
-                if (targetNode != root && targetNode.getElementNum() <= this.order / 2) {
+                if (targetNode.getElementNum() <= this.order / 2) {
                     delete(keyToBorrow);
                     oldKey.setKey(keyToBorrow);
                 } else {
                     targetNode.delete(key);
                     BNode mergedChild = mergeBranches(first, second);
-                    if(targetNode == root && targetNode.getElementNum() == this.order / 2) {
+                    if(targetNode == root && targetNode.getElementNum() <= this.order / 2) {
                         root = mergedChild;
                         return;
                     }
