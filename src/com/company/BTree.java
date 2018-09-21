@@ -126,10 +126,6 @@ public class BTree {
                 } else {
                     targetNode.delete(key);
                     BNode mergedChild = mergeBranches(first, second);
-                    if(targetNode == root && targetNode.getElementNum() <= this.order / 2) {
-                        root = mergedChild;
-                        return;
-                    }
                     if (precedingKey != null) precedingKey.setRight(mergedChild);
                     if (succeedingKey != null) succeedingKey.setLeft(mergedChild);
                 }
@@ -141,7 +137,6 @@ public class BTree {
             BNodeKey precedingKey = parent.getNextSmallestKey(key);
             BNodeKey succeedingKey = parent.getNextLargestKey(key);
             if(targetNode.getElementNum() <= this.order / 2) {
-
                 if(precedingKey != null) {
                     if (precedingKey.getLeft().getElementNum() + targetNode.getElementNum() <= this.order) {
                         int replacementKey = precedingKey.getKey();
@@ -174,7 +169,6 @@ public class BTree {
             } else {
                 targetNode.delete(key);
             }
-
         }
     }
 
