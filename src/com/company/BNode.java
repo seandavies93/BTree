@@ -209,6 +209,8 @@ public class BNode {
         int deleteIndex = this.getIndexOfKey(key);
         for (int i = deleteIndex; i < order - 1; i++) {
             elements[i].setKey(elements[i + 1].getKey());
+            elements[i].setLeft(elements[i + 1].getLeft());
+            elements[i].setRight(elements[i + 1].getRight());
         }
         elementNum--;
         for (int i = elementNum; i < order; i++) {
