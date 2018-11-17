@@ -135,6 +135,7 @@ public class BNode {
         while (elements[i].getKey() < key && i < order) {
             keys[i] = elements[i].getKey();
             i++;
+            if(i >= order) break;
         }
         keys[i] = key;
         i++;

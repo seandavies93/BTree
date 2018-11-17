@@ -52,5 +52,8 @@ public class Main {
         treeTest.delete(140);
         System.out.print("State:\n");
         treeTest.printTree(treeTest.getRoot(), 0);
+        treeTest.insert(treeTest.getRoot(), 200);
+        System.out.print("State:\n");
+        treeTest.printTree(treeTest.getRoot(), 0);
     }
 }
