@@ -165,6 +165,17 @@ public class BNode {
 
         }
         this.elementNum = index;
+        // The exception here is when the median happens to be the same as the key we are inserting
+        // Then we do not want to both insert it at the current level and propagate it up the tree after a split
+        if(median != key.getKey()) {
+            if (this.getElementNum() < this.order / 2) {
+                if (!this.isLeaf()) this.addKeyFromSplit(key);
+                else this.addKey(key.getKey());
+            } else {
+                if (!newNode.isLeaf()) newNode.addKeyFromSplit(key);
+                else newNode.addKey(key.getKey());
+            }
+        }
         return newNode;
     }
 
