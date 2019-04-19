@@ -126,10 +126,10 @@ public class BTree {
                     if (precedingKey != null) precedingKey.setRight(mergedChild);
                     if (succeedingKey != null) succeedingKey.setLeft(mergedChild);
                 }
-         } else {
+            } else {
                 delete(keyToBorrow);
                 oldKey.setKey(keyToBorrow);
-         }
+            }
         } else if (targetNode.isLeaf()) {
             if (targetNode.getElementNum() <= this.order / 2) {
                 if (!isLeafAndBorrowFromLeftSibling(parent, key)) isLeafAndBorrowFromRightSibling(parent, key);
