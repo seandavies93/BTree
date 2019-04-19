@@ -308,7 +308,7 @@ public class BNode {
 
     public boolean isInternal() {
         for (int i = 0; i < order; i++) {
-            if (elements[i].getRight() != null && elements[i].getLeft() != null) {
+            if (elements[i].getRight() != null || elements[i].getLeft() != null) {
                 return true;
             }
         }

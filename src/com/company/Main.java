@@ -35,15 +35,15 @@ public class Main {
         System.out.print("State:\n");
         treeTest.printTree(treeTest.getRoot(), 0);
         treeTest.insert(treeTest.getRoot(), 50);
-        System.out.print("State:\n");
+        System.out.print("State pre delete:\n");
         treeTest.printTree(treeTest.getRoot(), 0);
         treeTest.insert(treeTest.getRoot(), 93);
         System.out.print("State:\n");
         treeTest.printTree(treeTest.getRoot(), 0);
-        treeTest.delete(93);
+        treeTest.delete(29);
         System.out.print("State:\n");
         treeTest.printTree(treeTest.getRoot(), 0);
-        treeTest.delete(98);
+        treeTest.delete(67);
         System.out.print("State:\n");
         treeTest.printTree(treeTest.getRoot(), 0);
         treeTest.delete(101);
