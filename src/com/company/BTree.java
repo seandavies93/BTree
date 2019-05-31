@@ -166,7 +166,9 @@ public class BTree {
         }
         return sizeAtLeft > sizeAtRight ? keyToBorrowFromLeftSubtree:keyToBorrowFromRightSubtree;
     }
-
+    // The following borrow functions overlook the case when both the left sibling and the right sibling have the same number of elements
+    // I discovered an issue that prevents a deletion from occurring because this case falls through the cracks
+    // Really though, in this case it seems like the merge functions should have flagged the case as mergable
     public boolean isLeafAndBorrowFromRightSibling(BNode parent, int key) {
         BNodeKey succeedingKey = parent.getNextLargestKey(key);
         boolean success = false;
