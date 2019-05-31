@@ -118,6 +118,10 @@ public class BTree {
         } else if (targetNode.isInternal()) {
             if (canMerge(targetNode.getKey(key).getLeft(), targetNode.getKey(key).getRight())) {
                 if (targetNode.getElementNum() <= this.order / 2) {
+                    // This is where the issue is stemming from, if instead of trying to borrow without doing any kind of merging
+                    // maybe the best way to mitigate the fact that the element number is too low would be to first merge
+                    // then try to borrow from somewhere in the newly merged subtree, and use that borrowed key to replace this current one
+                    // (and then delete the borrowed on too)
                     delete(keyToBorrow);
                     oldKey.setKey(keyToBorrow);
                 } else {
