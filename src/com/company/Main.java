@@ -76,5 +76,20 @@ public class Main {
         treeTest.insert(treeTest.getRoot(), 4);
         System.out.print("State:\n");
         treeTest.printTree(treeTest.getRoot(), 0);
+        treeTest.insert(treeTest.getRoot(), 201);
+        System.out.print("State:\n");
+        treeTest.printTree(treeTest.getRoot(), 0);
+        treeTest.insert(treeTest.getRoot(), 300);
+        System.out.print("State:\n");
+        treeTest.printTree(treeTest.getRoot(), 0);
+        treeTest.insert(treeTest.getRoot(), 35);
+        System.out.print("State:\n");
+        treeTest.printTree(treeTest.getRoot(), 0);
+        treeTest.insert(treeTest.getRoot(), 78);
+        System.out.print("State:\n");
+        treeTest.printTree(treeTest.getRoot(), 0);
+        treeTest.delete(150);
+        System.out.print("State:\n");
+        treeTest.printTree(treeTest.getRoot(), 0);
     }
 }
