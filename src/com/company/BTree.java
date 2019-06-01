@@ -118,12 +118,46 @@ public class BTree {
         } else if (targetNode.isInternal()) {
             if (canMerge(targetNode.getKey(key).getLeft(), targetNode.getKey(key).getRight())) {
                 if (targetNode.getElementNum() <= this.order / 2) {
-                    // This is where the issue is stemming from, if instead of trying to borrow without doing any kind of merging
-                    // maybe the best way to mitigate the fact that the element number is too low would be to first merge
-                    // then try to borrow from somewhere in the newly merged subtree, and use that borrowed key to replace this current one
-                    // (and then delete the borrowed on too)
-                    delete(keyToBorrow);
-                    oldKey.setKey(keyToBorrow);
+                    int keyToReinsert;
+                    //delete(keyToBorrow);
+                    //oldKey.setKey(keyToBorrow);
+                if(precedingKey != null) {
+                    keyToReinsert = precedingKey.getKey();
+                    if (canMerge(precedingKey.getLeft(), targetNode)) {
+                        delete(precedingKey.getKey());
+                        delete(key);
+                        insert(root, keyToReinsert);
+                        return;
+                    } else {
+                        BNode relevantNode = borrowLargestItemFromSubtree(precedingKey.getLeft());
+                        if(relevantNode != null) {
+                            keyToBorrow = relevantNode.getLast().getKey();
+                            if (relevantNode.getElementNum() > order / 2) {
+                                delete(keyToBorrow);
+                                oldKey.setKey(keyToBorrow);
+                                return;
+                            }
+                        }
+                    }
+                }
+                if(succeedingKey != null) {
+                    keyToReinsert = succeedingKey.getKey();
+                    if(canMerge(targetNode, succeedingKey.getRight())) {
+                        delete(succeedingKey.getKey());
+                        delete(key);
+                        insert(root, keyToReinsert);
+                    } else {
+                        BNode relevantNode = borrowSmallestItemFromSubtree(succeedingKey.getRight());
+                        if(relevantNode != null) {
+                            keyToBorrow = relevantNode.getFirst().getKey();
+                            if (relevantNode.getElementNum() > order / 2) {
+                                delete(keyToBorrow);
+                                oldKey.setKey(keyToBorrow);
+                                return;
+                            }
+                        }
+                    }
+                }
                 } else {
                     targetNode.delete(key);
                     BNode mergedChild = mergeBranches(first, second);
@@ -136,12 +170,37 @@ public class BTree {
             }
         } else if (targetNode.isLeaf()) {
             if (targetNode.getElementNum() <= this.order / 2) {
+
                 if (!isLeafAndBorrowFromLeftSibling(parent, key)) isLeafAndBorrowFromRightSibling(parent, key);
+
             } else {
                 targetNode.delete(key);
             }
         }
 
+    }
+
+    public BNode getLeftSibling(BNode parent, int key) {
+        return parent.getNextSmallestKey(key).getLeft();
+    }
+
+    public BNode getRightSibling(BNode parent, int key) {
+        return parent.getNextLargestKey(key).getRight();
+    }
+
+    public BNode borrowSmallestItemFromSubtree(BNode parent) {
+        BNode trackingNode = parent.getFirst().getLeft();
+        while(trackingNode.getFirst().getLeft() != null) {
+            trackingNode = trackingNode.getFirst().getLeft();
+        }
+        return trackingNode;
+    }
+    public BNode borrowLargestItemFromSubtree(BNode parent) {
+        BNode trackingNode = parent.getLast().getRight();
+        while(trackingNode.getLast().getRight() != null) {
+            trackingNode = trackingNode.getLast().getRight();
+        }
+        return trackingNode;
     }
 
     // finds an appropriate element to borrow from another place in the tree
