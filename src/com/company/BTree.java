@@ -170,9 +170,25 @@ public class BTree {
             }
         } else if (targetNode.isLeaf()) {
             if (targetNode.getElementNum() <= this.order / 2) {
-
-                if (!isLeafAndBorrowFromLeftSibling(parent, key)) isLeafAndBorrowFromRightSibling(parent, key);
-
+                boolean rotationOccurred = false;
+                if (!isLeafAndBorrowFromLeftSibling(parent, key)) {
+                    if(!isLeafAndBorrowFromRightSibling(parent, key)) {
+                        if(precedingKey != null) {
+                            int keyToReInsert = precedingKey.getKey();
+                            delete(keyToReInsert);
+                            delete(key);
+                            insert(root, keyToReInsert);
+                            return;
+                        }
+                        if(succeedingKey != null) {
+                            int keyToReInsert = succeedingKey.getKey();
+                            delete(keyToReInsert);
+                            delete(key);
+                            insert(root, keyToReInsert);
+                            return;
+                        }
+                    }
+                }
             } else {
                 targetNode.delete(key);
             }
@@ -243,6 +259,7 @@ public class BTree {
                 rightSibling.delete(itemToRemove);
                 succeedingKey.setKey(itemToRemove);
                 succeedingKey.getLeft().addKey(borrowItem);
+                succeedingKey.getLeft().delete(key);
                 success = true;
             }
         }
@@ -260,6 +277,7 @@ public class BTree {
                 leftSibling.delete(itemToRemove);
                 precedingKey.setKey(itemToRemove);
                 precedingKey.getRight().addKey(borrowItem);
+                precedingKey.getRight().delete(key);
                 success = true;
             }
         }
