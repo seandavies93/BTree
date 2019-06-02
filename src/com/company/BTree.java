@@ -134,7 +134,9 @@ public class BTree {
                             keyToBorrow = relevantNode.getLast().getKey();
                             if (relevantNode.getElementNum() > order / 2) {
                                 delete(keyToBorrow);
-                                oldKey.setKey(keyToBorrow);
+                                succeedingKey.setKey(keyToBorrow);
+                                insert(root, keyToReinsert);
+                                delete(key);
                                 return;
                             }
                         }
@@ -152,7 +154,9 @@ public class BTree {
                             keyToBorrow = relevantNode.getFirst().getKey();
                             if (relevantNode.getElementNum() > order / 2) {
                                 delete(keyToBorrow);
-                                oldKey.setKey(keyToBorrow);
+                                succeedingKey.setKey(keyToBorrow);
+                                insert(root, keyToReinsert);
+                                delete(key);
                                 return;
                             }
                         }
