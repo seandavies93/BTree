@@ -244,8 +244,8 @@ public class BNode {
     public BNode mergeWithNode(BNode otherNode) {
         for (int i = 0; i < elementNum; i++) {
             otherNode.addKey(elements[i].getKey());
+            this.elementNum--;
         }
-        elementNum = elementNum + otherNode.getElementNum();
         return otherNode;
     }
 
