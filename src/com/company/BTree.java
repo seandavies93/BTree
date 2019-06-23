@@ -95,7 +95,7 @@ public class BTree {
         BNode targetNode = root;
         while(targetNode.findAppropriateChild(key) != null) {
             parent = targetNode;
-            targetNode = targetNode.findAppropriateChild(key);
+            targetNode = targetNode.findAppropriateChild(key); // FIXME: seems as though there is an issue in this method
         }
         int keyToBorrow = borrowAndDelete(targetNode, key);
         BNodeKey oldKey = targetNode.getKey(key);
@@ -121,52 +121,61 @@ public class BTree {
                     int keyToReinsert;
                     //delete(keyToBorrow);
                     //oldKey.setKey(keyToBorrow);
-                if(precedingKey != null) {
-                    keyToReinsert = precedingKey.getKey();
-                    if (canMerge(precedingKey.getLeft(), targetNode)) {
+                    /*
+                    if(precedingKey != null) {
+                        keyToReinsert = precedingKey.getKey();
+                        if(canMerge(precedingKey.getLeft(), targetNode)) {
+                            delete(precedingKey.getKey());
+                            delete(key);
+                            insert(root, keyToReinsert);
+                            return;
+                        }
+                        if(succeedingKey != null) {
+                            if(canMerge(targetNode, succeedingKey.getRight())) {
+                                keyToReinsert = succeedingKey.getKey();
+                                delete(succeedingKey.getKey());
+                                delete(key);
+                                insert(root, keyToReinsert);
+                                return;
+                            }
+
+                        }
+                    }
+                    if(succeedingKey != null) {
+                        keyToReinsert = succeedingKey.getKey();
+                        delete(succeedingKey.getKey());
+                        delete(key);
+                        insert(root, keyToReinsert);
+                        return;
+                    }
+                    if(precedingKey != null) {
+                        keyToReinsert = precedingKey.getKey();
                         delete(precedingKey.getKey());
                         delete(key);
                         insert(root, keyToReinsert);
                         return;
-                    } else {
-                        BNode relevantNode = borrowLargestItemFromSubtree(precedingKey.getLeft());
-                        if(relevantNode != null) {
-                            keyToBorrow = relevantNode.getLast().getKey();
-                            if (relevantNode.getElementNum() > order / 2) {
-                                delete(keyToBorrow);
-                                succeedingKey.setKey(keyToBorrow);
-                                insert(root, keyToReinsert);
-                                delete(key);
-                                return;
-                            }
-                        }
                     }
-                }
-                if(succeedingKey != null) {
-                    keyToReinsert = succeedingKey.getKey();
-                    if(canMerge(targetNode, succeedingKey.getRight())) {
+                    */
+                    if(precedingKey != null) {
+                        keyToReinsert = precedingKey.getKey();
+                        delete(precedingKey.getKey());
+                        delete(key);
+                        insert(root, keyToReinsert);
+                        return;
+                    }
+                    if(succeedingKey != null) {
+                        keyToReinsert = succeedingKey.getKey();
                         delete(succeedingKey.getKey());
                         delete(key);
                         insert(root, keyToReinsert);
-                    } else {
-                        BNode relevantNode = borrowSmallestItemFromSubtree(succeedingKey.getRight());
-                        if(relevantNode != null) {
-                            keyToBorrow = relevantNode.getFirst().getKey();
-                            if (relevantNode.getElementNum() > order / 2) {
-                                delete(keyToBorrow);
-                                succeedingKey.setKey(keyToBorrow);
-                                insert(root, keyToReinsert);
-                                delete(key);
-                                return;
-                            }
-                        }
                     }
-                }
                 } else {
                     targetNode.delete(key);
                     BNode mergedChild = mergeBranches(first, second);
-                    if (precedingKey != null) precedingKey.setRight(mergedChild);
-                    if (succeedingKey != null) succeedingKey.setLeft(mergedChild);
+                    BNodeKey nextInBlock = targetNode.getNextLargestKey(key);
+                    BNodeKey previousInBlock = targetNode.getNextSmallestKey(key);
+                    if (previousInBlock != null) previousInBlock.setRight(mergedChild); // This preceding key and succeeding key are perhaps referring to the parent which is not correct should the the current key's left and right subtree
+                    if (nextInBlock != null) nextInBlock.setLeft(mergedChild);
                 }
             } else {
                 delete(keyToBorrow);
