@@ -158,13 +158,14 @@ public class BNode {
         for (int i = index; i < initialNumElements; i++) {
             if (elements[i].getKey() == median) {
                 elements[i] = new BNodeKey();
+                this.elementNum--;
             } else {
                 newNode.addKeyFull(elements[i]);
                 elements[i] = new BNodeKey();
+                this.elementNum--;
             }
 
         }
-        this.elementNum = index;
         // The exception here is when the median happens to be the same as the key we are inserting
         // Then we do not want to both insert it at the current level and propagate it up the tree after a split
         if(median != key.getKey()) {
