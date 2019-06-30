@@ -242,9 +242,10 @@ public class BNode {
     }
 
     public BNode mergeWithNode(BNode otherNode) {
-        for (int i = 0; i < elementNum; i++) {
+        // We don't need to update anything in the current node as it will be garbage collected
+        int endIndex = this.elementNum;
+        for (int i = 0; i < endIndex; i++) { //FIXME: this might be the source of the problem. the variable being used is preventing all nodes from being transferred to the one that is eventually retained. Thus nodes not transferred are lost as their node is garbage collected.
             otherNode.addKey(elements[i].getKey());
-            this.elementNum--;
         }
         return otherNode;
     }

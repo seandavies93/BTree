@@ -124,5 +124,7 @@ public class Main {
         System.out.println("State after 505:\n");
         treeTest.printTree(treeTest.getRoot(), 0);
         // Items left: 78Y, 35Y, 300Y, 4Y, 3Y, 2Y, 1Y, 167Y, 161Y, 200Y, 93Y, 50Y, 27Y, 28Y, 30Y, 56Y, 98Y
+
+
     }
 }
