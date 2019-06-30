@@ -184,7 +184,7 @@ public class BTree {
         } else if (targetNode.isLeaf()) {
             if (targetNode.getElementNum() <= this.order / 2) {
                 boolean rotationOccurred = false;
-                if (!isLeafAndBorrowFromLeftSibling(parent, key)) { // FIXME: Seemingly nothing within this clause executes after a few iterations of the delete code during the deletion of 503. I'm sure that at least something needs to be executed here.
+                if (!isLeafAndBorrowFromLeftSibling(parent, key)) { 
                     if(!isLeafAndBorrowFromRightSibling(parent, key)) {
                         if(precedingKey != null) {
                             int keyToReInsert = precedingKey.getKey();
