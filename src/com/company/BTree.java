@@ -119,43 +119,6 @@ public class BTree {
             if (canMerge(targetNode.getKey(key).getLeft(), targetNode.getKey(key).getRight())) {
                 if (targetNode.getElementNum() <= this.order / 2) {
                     int keyToReinsert;
-                    //delete(keyToBorrow);
-                    //oldKey.setKey(keyToBorrow);
-                    /*
-                    if(precedingKey != null) {
-                        keyToReinsert = precedingKey.getKey();
-                        if(canMerge(precedingKey.getLeft(), targetNode)) {
-                            delete(precedingKey.getKey());
-                            delete(key);
-                            insert(root, keyToReinsert);
-                            return;
-                        }
-                        if(succeedingKey != null) {
-                            if(canMerge(targetNode, succeedingKey.getRight())) {
-                                keyToReinsert = succeedingKey.getKey();
-                                delete(succeedingKey.getKey());
-                                delete(key);
-                                insert(root, keyToReinsert);
-                                return;
-                            }
-
-                        }
-                    }
-                    if(succeedingKey != null) {
-                        keyToReinsert = succeedingKey.getKey();
-                        delete(succeedingKey.getKey());
-                        delete(key);
-                        insert(root, keyToReinsert);
-                        return;
-                    }
-                    if(precedingKey != null) {
-                        keyToReinsert = precedingKey.getKey();
-                        delete(precedingKey.getKey());
-                        delete(key);
-                        insert(root, keyToReinsert);
-                        return;
-                    }
-                    */
                     if(precedingKey != null) {
                         keyToReinsert = precedingKey.getKey();
                         delete(precedingKey.getKey());
