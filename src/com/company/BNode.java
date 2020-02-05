@@ -244,7 +244,7 @@ public class BNode {
 
     public BNode mergeWithNode(BNode otherNode) {
         // We don't need to update anything in the current node as it will be garbage collected
-        int endIndex = this.elementNum;
+        int endIndex = otherNode.getElementNum();
         for (int i = 0; i < endIndex; i++) {
             this.addKeyFull(otherNode.getKeyAtIndex(i));
         }

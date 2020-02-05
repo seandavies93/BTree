@@ -105,13 +105,9 @@ public class BTree {
         BNodeKey succeedingKey = parent.getNextLargestKey(key);
         if(targetNode == root) {
             if(!canMerge(targetNode.getKey(key).getLeft(), targetNode.getKey(key).getRight())) {
-                //System.out.println("ABOUT TO DELETE INTERNAL !canMerge root+++++");
-                //this.printTree(root, 0);
                 delete(keyToBorrow);
                 oldKey.setKey(keyToBorrow);
             } else {
-                //System.out.println("ABOUT TO DELETE INTERNAL canMerge root+++++");
-                //this.printTree(root, 0);
                 boolean isSingleItem = (targetNode.getElementNum() == 1);
                 targetNode.delete(key);
                 BNode mergedChild = null;
@@ -128,8 +124,6 @@ public class BTree {
                     int keyToReinsert;
                     if(precedingKey != null) {
                         keyToReinsert = precedingKey.getKey();
-                        //System.out.println("ABOUT TO DELETE INTERNAL+++++");
-                        //this.printTree(root, 0);
                         delete(precedingKey.getKey());
                         delete(key);
                         insert(root, keyToReinsert);
@@ -142,8 +136,6 @@ public class BTree {
                         insert(root, keyToReinsert);
                     }
                 } else {
-                    //System.out.println("ABOUT TO DELETE INTERNAL canMerge+++++");
-                    //this.printTree(root, 0);
                     targetNode.delete(key);
                     BNode mergedChild = mergeBranches(first, second);
                     BNodeKey nextInBlock = targetNode.getNextLargestKey(key);
@@ -152,8 +144,6 @@ public class BTree {
                     if (nextInBlock != null) nextInBlock.setLeft(mergedChild);
                 }
             } else {
-                //System.out.println("ABOUT TO DELETE INTERNAL !canMerge+++++");
-                //this.printTree(root, 0);
                 delete(keyToBorrow);
                 oldKey.setKey(keyToBorrow);
             }
