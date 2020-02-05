@@ -40,6 +40,7 @@ public class BNode {
 
     public void addKeyFull(BNodeKey key) {
         int insertIndex = 0;
+        if (key == null) return;
         int value = key.getKey();
         if (isEmpty()) {
             elements[0] = key;
@@ -245,9 +246,9 @@ public class BNode {
         // We don't need to update anything in the current node as it will be garbage collected
         int endIndex = this.elementNum;
         for (int i = 0; i < endIndex; i++) {
-            otherNode.addKey(elements[i].getKey());
+            this.addKeyFull(otherNode.getKeyAtIndex(i));
         }
-        return otherNode;
+        return this;
     }
 
     public BNodeKey getNextLargestKey(int key) {
@@ -263,6 +264,9 @@ public class BNode {
     public BNodeKey getNextSmallestKey(int key) {
         int i = 0;
         while (key > elements[i].getKey() && elements[i].getKey() != -1) {
+            if (i == order - 1) {
+                return elements[i];
+            }
             i++;
         }
         if (i == 0) return null;
@@ -297,6 +301,10 @@ public class BNode {
             i++;
         }
         return null;
+    }
+
+    public BNodeKey getKeyAtIndex(int index) {
+        return elements[index];
     }
 
     public boolean isLeaf() {

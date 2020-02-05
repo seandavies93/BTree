@@ -95,7 +95,7 @@ public class BTree {
         BNode targetNode = root;
         while(targetNode.findAppropriateChild(key) != null) {
             parent = targetNode;
-            targetNode = targetNode.findAppropriateChild(key); // FIXME: seems as though there is an issue in this method
+            targetNode = targetNode.findAppropriateChild(key);
         }
         int keyToBorrow = borrowAndDelete(targetNode, key);
         BNodeKey oldKey = targetNode.getKey(key);
@@ -105,12 +105,19 @@ public class BTree {
         BNodeKey succeedingKey = parent.getNextLargestKey(key);
         if(targetNode == root) {
             if(!canMerge(targetNode.getKey(key).getLeft(), targetNode.getKey(key).getRight())) {
+                //System.out.println("ABOUT TO DELETE INTERNAL !canMerge root+++++");
+                //this.printTree(root, 0);
                 delete(keyToBorrow);
                 oldKey.setKey(keyToBorrow);
             } else {
+                //System.out.println("ABOUT TO DELETE INTERNAL canMerge root+++++");
+                //this.printTree(root, 0);
                 boolean isSingleItem = (targetNode.getElementNum() == 1);
                 targetNode.delete(key);
-                BNode mergedChild = mergeBranches(first, second);
+                BNode mergedChild = null;
+                if(first != null && second != null) {
+                    mergedChild = mergeBranches(first, second);
+                }
                 if (precedingKey != null) precedingKey.setRight(mergedChild);
                 if (succeedingKey != null) succeedingKey.setLeft(mergedChild);
                 if (isSingleItem) root = mergedChild;
@@ -121,6 +128,8 @@ public class BTree {
                     int keyToReinsert;
                     if(precedingKey != null) {
                         keyToReinsert = precedingKey.getKey();
+                        //System.out.println("ABOUT TO DELETE INTERNAL+++++");
+                        //this.printTree(root, 0);
                         delete(precedingKey.getKey());
                         delete(key);
                         insert(root, keyToReinsert);
@@ -133,6 +142,8 @@ public class BTree {
                         insert(root, keyToReinsert);
                     }
                 } else {
+                    //System.out.println("ABOUT TO DELETE INTERNAL canMerge+++++");
+                    //this.printTree(root, 0);
                     targetNode.delete(key);
                     BNode mergedChild = mergeBranches(first, second);
                     BNodeKey nextInBlock = targetNode.getNextLargestKey(key);
@@ -141,12 +152,13 @@ public class BTree {
                     if (nextInBlock != null) nextInBlock.setLeft(mergedChild);
                 }
             } else {
+                //System.out.println("ABOUT TO DELETE INTERNAL !canMerge+++++");
+                //this.printTree(root, 0);
                 delete(keyToBorrow);
                 oldKey.setKey(keyToBorrow);
             }
         } else if (targetNode.isLeaf()) {
             if (targetNode.getElementNum() <= this.order / 2) {
-                boolean rotationOccurred = false;
                 if (!isLeafAndBorrowFromLeftSibling(parent, key)) { 
                     if(!isLeafAndBorrowFromRightSibling(parent, key)) {
                         if(precedingKey != null) {
@@ -262,6 +274,7 @@ public class BTree {
 
     //this function determines if the appropriate lower branches can be merged
     public boolean canMerge(BNode first, BNode second) {
+        if(first == null && second == null) return true;
         while (first.getLast() != null && second.getFirst() != null) {
             if (first.getElementNum() + second.getElementNum() > order) {
                 return false;
