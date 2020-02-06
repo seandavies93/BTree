@@ -122,19 +122,10 @@ public class BTree {
             if (canMerge(targetNode.getKey(key).getLeft(), targetNode.getKey(key).getRight())) {
                 if (targetNode.getElementNum() <= this.order / 2) {
                     int keyToReinsert;
-                    if(precedingKey != null) {
-                        keyToReinsert = precedingKey.getKey();
-                        delete(precedingKey.getKey());
-                        delete(key);
-                        insert(root, keyToReinsert);
-                        return;
-                    }
-                    if(succeedingKey != null) {
-                        keyToReinsert = succeedingKey.getKey();
-                        delete(succeedingKey.getKey());
-                        delete(key);
-                        insert(root, keyToReinsert);
-                    }
+                    keyToReinsert = precedingKey != null ? precedingKey.getKey():succeedingKey.getKey();
+                    delete(keyToReinsert);
+                    delete(key);
+                    insert(root, keyToReinsert);
                 } else {
                     targetNode.delete(key);
                     BNode mergedChild = mergeBranches(first, second);
@@ -151,20 +142,11 @@ public class BTree {
             if (targetNode.getElementNum() <= this.order / 2) {
                 if (!isLeafAndBorrowFromLeftSibling(parent, key)) { 
                     if(!isLeafAndBorrowFromRightSibling(parent, key)) {
-                        if(precedingKey != null) {
-                            int keyToReInsert = precedingKey.getKey();
-                            delete(keyToReInsert);
-                            delete(key);
-                            insert(root, keyToReInsert);
-                            return;
-                        }
-                        if(succeedingKey != null) {
-                            int keyToReInsert = succeedingKey.getKey();
-                            delete(keyToReInsert);
-                            delete(key);
-                            insert(root, keyToReInsert);
-                            return;
-                        }
+                        int keyToReinsert;
+                        keyToReinsert = precedingKey != null ? precedingKey.getKey():succeedingKey.getKey();
+                        delete(keyToReinsert);
+                        delete(key);
+                        insert(root, keyToReinsert);
                     }
                 }
             } else {

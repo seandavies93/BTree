@@ -123,7 +123,7 @@ public class Main {
         treeTest.delete(505); // FIXME: there seems to be a minor issues occurring here, but I think I might be close to ironing out slight inconsistencies in the ancillary code.
         System.out.println("State after 505:\n");
         treeTest.printTree(treeTest.getRoot(), 0);
-        // Items left: 78Y, 35Y, 300Y, 4Y, 3Y, 2Y, 1Y, 167Y, 161Y, 200Y, 93Y, 50Y, 27Y, 28Y, 30Y, 56Y, 98Y
+        // Items left: 78Y, 35Y, 300Y, 4Y, 3Y, 2Y, 1Y, 167Y, 161Y, 200Y, 201Y, 93Y, 50Y, 27Y, 28Y, 30Y, 56Y, 98Y
         // Inspect line 122 when deleting element 201 in deletion process
 
 
