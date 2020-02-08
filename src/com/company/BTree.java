@@ -114,8 +114,7 @@ public class BTree {
                 if(first != null && second != null) {
                     mergedChild = mergeBranches(first, second);
                 }
-                if (precedingKey != null) precedingKey.setRight(mergedChild);
-                if (succeedingKey != null) succeedingKey.setLeft(mergedChild);
+                setMergedChildOnLeftoverNodes(targetNode, key, mergedChild);
                 if (isSingleItem) root = mergedChild;
             }
         } else if (targetNode.isInternal()) {
@@ -129,10 +128,7 @@ public class BTree {
                 } else {
                     targetNode.delete(key);
                     BNode mergedChild = mergeBranches(first, second);
-                    BNodeKey nextInBlock = targetNode.getNextLargestKey(key);
-                    BNodeKey previousInBlock = targetNode.getNextSmallestKey(key);
-                    if (previousInBlock != null) previousInBlock.setRight(mergedChild);
-                    if (nextInBlock != null) nextInBlock.setLeft(mergedChild);
+                    setMergedChildOnLeftoverNodes(targetNode, key, mergedChild);
                 }
             } else {
                 delete(keyToBorrow);
