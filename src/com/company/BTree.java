@@ -104,7 +104,7 @@ public class BTree {
         BNodeKey precedingKey = parent.getNextSmallestKey(key);
         BNodeKey succeedingKey = parent.getNextLargestKey(key);
         if(targetNode == root) {
-            if(!canMerge(targetNode.getKey(key).getLeft(), targetNode.getKey(key).getRight())) {
+            if(!canMerge(first, second)) {
                 delete(keyToBorrow);
                 oldKey.setKey(keyToBorrow);
             } else {
@@ -119,7 +119,7 @@ public class BTree {
                 if (isSingleItem) root = mergedChild;
             }
         } else if (targetNode.isInternal()) {
-            if (canMerge(targetNode.getKey(key).getLeft(), targetNode.getKey(key).getRight())) {
+            if (canMerge(first, second)) {
                 if (targetNode.getElementNum() <= this.order / 2) {
                     int keyToReinsert;
                     keyToReinsert = precedingKey != null ? precedingKey.getKey():succeedingKey.getKey();
@@ -131,7 +131,7 @@ public class BTree {
                     BNode mergedChild = mergeBranches(first, second);
                     BNodeKey nextInBlock = targetNode.getNextLargestKey(key);
                     BNodeKey previousInBlock = targetNode.getNextSmallestKey(key);
-                    if (previousInBlock != null) previousInBlock.setRight(mergedChild); // This preceding key and succeeding key are perhaps referring to the parent which is not correct should the the current key's left and right subtree
+                    if (previousInBlock != null) previousInBlock.setRight(mergedChild);
                     if (nextInBlock != null) nextInBlock.setLeft(mergedChild);
                 }
             } else {
@@ -153,7 +153,13 @@ public class BTree {
                 targetNode.delete(key);
             }
         }
+    }
 
+    public void setMergedChildOnLeftoverNodes(BNode targetNode, int key, BNode mergedChild) {
+        BNodeKey nextInBlock = targetNode.getNextLargestKey(key);
+        BNodeKey previousInBlock = targetNode.getNextSmallestKey(key);
+        if (previousInBlock != null) previousInBlock.setRight(mergedChild);
+        if (nextInBlock != null) nextInBlock.setLeft(mergedChild);
     }
 
     public BNode getLeftSibling(BNode parent, int key) {
