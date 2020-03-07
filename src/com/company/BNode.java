@@ -326,16 +326,10 @@ public class BNode {
     }
 
     public boolean isFull() {
-        if (elementNum == order) {
-            return true;
-        }
-        return false;
+        return elementNum == order;
     }
 
     public boolean isEmpty() {
-        if (elementNum == 0) {
-            return true;
-        }
-        return false;
+        return elementNum == 0;
     }
 }
