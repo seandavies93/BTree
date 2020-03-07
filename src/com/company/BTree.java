@@ -127,7 +127,10 @@ public class BTree {
                     insert(root, keyToReinsert);
                 } else {
                     targetNode.delete(key);
-                    BNode mergedChild = mergeBranches(first, second);
+                    BNode mergedChild = null;
+                    if(first != null && second != null) {
+                        mergedChild = mergeBranches(first, second);
+                    }
                     setMergedChildOnLeftoverNodes(targetNode, key, mergedChild);
                 }
             } else {
@@ -157,30 +160,6 @@ public class BTree {
         if (previousInBlock != null) previousInBlock.setRight(mergedChild);
         if (nextInBlock != null) nextInBlock.setLeft(mergedChild);
     }
-
-    public BNode getLeftSibling(BNode parent, int key) {
-        return parent.getNextSmallestKey(key).getLeft();
-    }
-
-    public BNode getRightSibling(BNode parent, int key) {
-        return parent.getNextLargestKey(key).getRight();
-    }
-
-    public BNode borrowSmallestItemFromSubtree(BNode parent) {
-        BNode trackingNode = parent.getFirst().getLeft();
-        while(trackingNode.getFirst().getLeft() != null) {
-            trackingNode = trackingNode.getFirst().getLeft();
-        }
-        return trackingNode;
-    }
-    public BNode borrowLargestItemFromSubtree(BNode parent) {
-        BNode trackingNode = parent.getLast().getRight();
-        while(trackingNode.getLast().getRight() != null) {
-            trackingNode = trackingNode.getLast().getRight();
-        }
-        return trackingNode;
-    }
-
     // finds an appropriate element to borrow from another place in the tree
     public int borrowAndDelete(BNode targetNode, int key) {
         BNode trackingNode = targetNode.getKey(key).getRight();
