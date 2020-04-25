@@ -111,28 +111,13 @@ public class BTree {
                 boolean isSingleItem = (targetNode.getElementNum() == 1);
                 targetNode.delete(key);
                 BNode mergedChild = null;
-                if(first != null && second != null) {
-                    mergedChild = mergeBranches(first, second);
-                }
+                if(first != null && second != null) mergedChild = mergeBranches(first, second);
                 setMergedChildOnLeftoverNodes(targetNode, key, mergedChild);
                 if (isSingleItem) root = mergedChild;
             }
         } else if (targetNode.isInternal()) {
             if (canMerge(first, second)) {
-                if (targetNode.getElementNum() <= this.order / 2) {
-                    int keyToReinsert;
-                    keyToReinsert = precedingKey != null ? precedingKey.getKey():succeedingKey.getKey();
-                    delete(keyToReinsert);
-                    delete(key);
-                    insert(root, keyToReinsert);
-                } else {
-                    targetNode.delete(key);
-                    BNode mergedChild = null;
-                    if(first != null && second != null) {
-                        mergedChild = mergeBranches(first, second);
-                    }
-                    setMergedChildOnLeftoverNodes(targetNode, key, mergedChild);
-                }
+                handleMergeableChildrenInternal(targetNode, precedingKey, succeedingKey, key, first, second);
             } else {
                 delete(keyToBorrow);
                 oldKey.setKey(keyToBorrow);
@@ -151,6 +136,28 @@ public class BTree {
             } else {
                 targetNode.delete(key);
             }
+        }
+    }
+
+    public void handleMergeableChildrenInternal(BNode targetNode,
+                                                BNodeKey precedingKey,
+                                                BNodeKey succeedingKey,
+                                                int key,
+                                                BNode first,
+                                                BNode second) {
+        if (targetNode.getElementNum() <= this.order / 2) {
+            int keyToReinsert;
+            keyToReinsert = precedingKey != null ? precedingKey.getKey():succeedingKey.getKey();
+            delete(keyToReinsert);
+            delete(key);
+            insert(root, keyToReinsert);
+        } else {
+            targetNode.delete(key);
+            BNode mergedChild = null;
+            if(first != null && second != null) {
+                mergedChild = mergeBranches(first, second);
+            }
+            setMergedChildOnLeftoverNodes(targetNode, key, mergedChild);
         }
     }
 
@@ -186,9 +193,7 @@ public class BTree {
         }
         return sizeAtLeft > sizeAtRight ? keyToBorrowFromLeftSubtree:keyToBorrowFromRightSubtree;
     }
-    // The following borrow functions overlook the case when both the left sibling and the right sibling have the same number of elements
-    // I discovered an issue that prevents a deletion from occurring because this case falls through the cracks
-    // Really though, in this case it seems like the merge functions should have flagged the case as mergable
+
     public boolean isLeafAndBorrowFromRightSibling(BNode parent, int key) {
         BNodeKey succeedingKey = parent.getNextLargestKey(key);
         boolean success = false;

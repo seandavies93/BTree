@@ -114,22 +114,6 @@ public class BNode {
         return false;
     }
 
-    public void setChildNode(BNode nodeToInsert) {
-        int index = 0;
-        nodeToInsert.printElements();
-        if (elements[0].getKey() > nodeToInsert.getLast().getKey()) {
-            elements[0].setLeft(nodeToInsert);
-        } else if (elements[elementNum - 1].getKey() < nodeToInsert.getFirst().getKey()) {
-            elements[elementNum - 1].setRight(nodeToInsert);
-        }
-        for (int i = 0; i < elementNum; i++) {
-            if (elements[i].getKey() < nodeToInsert.getFirst().getKey() && nodeToInsert.getLast().getKey() < elements[i + 1].getKey()) {
-                elements[i].setRight(nodeToInsert);
-                elements[i + 1].setLeft(nodeToInsert);
-            }
-        }
-    }
-
     public int getMedian(int key) {
         int[] keys = new int[order + 1];
         int i = 0;
@@ -253,7 +237,6 @@ public class BNode {
 
     public BNodeKey getNextLargestKey(int key) {
         int i = 0;
-
         while (key >= elements[i].getKey() && elements[i].getKey() != -1) {
             if (i == elementNum - 1) return null;
             i++;
@@ -292,7 +275,6 @@ public class BNode {
     }
 
     public BNodeKey getKey(int key) {
-
         int i = 0;
         while (i < order) {
             if (key == elements[i].getKey()) {

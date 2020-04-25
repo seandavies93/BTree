@@ -44,7 +44,7 @@
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
@@ -94,42 +94,46 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="262" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1580853355998" />
-    <state width="1877" height="410" key="GridCell.Tab.0.bottom" timestamp="1580931129391">
+    <state width="1877" height="245" key="GridCell.Tab.0.bottom" timestamp="1587222560253">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="410" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1580931129391" />
-    <state width="1877" height="410" key="GridCell.Tab.0.center" timestamp="1580931129391">
+    <state width="1877" height="245" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1587222560253" />
+    <state width="1877" height="245" key="GridCell.Tab.0.center" timestamp="1587222560253">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="410" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1580931129391" />
-    <state width="1877" height="410" key="GridCell.Tab.0.left" timestamp="1580931129391">
+    <state width="1877" height="245" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1587222560253" />
+    <state width="1877" height="245" key="GridCell.Tab.0.left" timestamp="1587222560253">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="410" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1580931129391" />
-    <state width="1877" height="410" key="GridCell.Tab.0.right" timestamp="1580931129391">
+    <state width="1877" height="245" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1587222560253" />
+    <state width="1877" height="245" key="GridCell.Tab.0.right" timestamp="1587222560253">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="410" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1580931129391" />
-    <state width="1877" height="410" key="GridCell.Tab.1.bottom" timestamp="1580931129391">
+    <state width="1877" height="245" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1587222560253" />
+    <state width="1877" height="410" key="GridCell.Tab.1.bottom" timestamp="1580937847094">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="410" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1580931129391" />
-    <state width="1877" height="410" key="GridCell.Tab.1.center" timestamp="1580931129391">
+    <state width="1877" height="410" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1580937847094" />
+    <state width="1877" height="410" key="GridCell.Tab.1.center" timestamp="1580937847094">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="410" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1580931129391" />
-    <state width="1877" height="410" key="GridCell.Tab.1.left" timestamp="1580931129391">
+    <state width="1877" height="410" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1580937847094" />
+    <state width="1877" height="410" key="GridCell.Tab.1.left" timestamp="1580937847094">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="410" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1580931129391" />
-    <state width="1877" height="410" key="GridCell.Tab.1.right" timestamp="1580931129391">
+    <state width="1877" height="410" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1580937847094" />
+    <state width="1877" height="410" key="GridCell.Tab.1.right" timestamp="1580937847094">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="410" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1580931129391" />
-    <state x="661" y="345" key="com.intellij.ide.util.TipDialog" timestamp="1580927649739">
+    <state width="1877" height="410" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1580937847094" />
+    <state x="461" y="163" key="SettingsEditor" timestamp="1587220194614">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="661" y="345" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1580927649739" />
+    <state x="461" y="163" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1587220194614" />
+    <state x="543" y="342" key="com.intellij.ide.util.TipDialog" timestamp="1587807636101">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="543" y="342" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1587807636101" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -140,26 +144,9 @@
           <option name="timeStamp" value="54" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <condition expression="keyToReinsert == 93" language="JAVA" />
-          <url>file://$PROJECT_DIR$/src/com/company/BTree.java</url>
-          <line>133</line>
-          <option name="timeStamp" value="59" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/com/company/BTree.java</url>
-          <line>112</line>
-          <option name="timeStamp" value="60" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/com/company/Main.java</url>
           <line>51</line>
           <option name="timeStamp" value="63" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <condition expression="keyToReInsert == 93" language="JAVA" />
-          <url>file://$PROJECT_DIR$/src/com/company/BTree.java</url>
-          <line>165</line>
-          <option name="timeStamp" value="64" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
