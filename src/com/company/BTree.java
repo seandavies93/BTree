@@ -139,12 +139,13 @@ public class BTree {
         }
     }
 
-    public void handleMergeableChildrenInternal(BNode targetNode,
-                                                BNodeKey precedingKey,
-                                                BNodeKey succeedingKey,
-                                                int key,
-                                                BNode first,
-                                                BNode second) {
+    public void handleMergeableChildrenInternal(
+            BNode targetNode,
+            BNodeKey precedingKey,
+            BNodeKey succeedingKey,
+            int key,
+            BNode first,
+            BNode second) {
         if (targetNode.getElementNum() <= this.order / 2) {
             int keyToReinsert;
             keyToReinsert = precedingKey != null ? precedingKey.getKey():succeedingKey.getKey();
