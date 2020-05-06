@@ -104,21 +104,25 @@ public class BTree {
         BNodeKey precedingKey = parent.getNextSmallestKey(key);
         BNodeKey succeedingKey = parent.getNextLargestKey(key);
         if(targetNode == root) {
-            if(!canMerge(first, second)) {
+            if(!canMerge(first, second)) { // If we cannot merge the nodes below then we need to try something else
                 delete(keyToBorrow);
                 oldKey.setKey(keyToBorrow);
             } else {
                 boolean isSingleItem = (targetNode.getElementNum() == 1);
                 targetNode.delete(key);
                 BNode mergedChild = null;
-                if(first != null && second != null) mergedChild = mergeBranches(first, second);
+                if(first != null && second != null)
+                    mergedChild = mergeBranches(first, second);
                 setMergedChildOnLeftoverNodes(targetNode, key, mergedChild);
-                if (isSingleItem) root = mergedChild;
+                if (isSingleItem)
+                    root = mergedChild;
             }
         } else if (targetNode.isInternal()) {
             if (canMerge(first, second)) {
+                // in this case we can simply delete and merge lower nodes where appropriate
                 handleMergeableChildrenInternal(targetNode, precedingKey, succeedingKey, key, first, second);
             } else {
+                // recursively backtrack and attempt to delete a key lower down for the purposes of putting it in the current key's place
                 delete(keyToBorrow);
                 oldKey.setKey(keyToBorrow);
             }
@@ -127,7 +131,7 @@ public class BTree {
                 if (!isLeafAndBorrowFromLeftSibling(parent, key)) { 
                     if(!isLeafAndBorrowFromRightSibling(parent, key)) {
                         int keyToReinsert;
-                        keyToReinsert = precedingKey != null ? precedingKey.getKey():succeedingKey.getKey();
+                        keyToReinsert = precedingKey != null ? precedingKey.getKey() : succeedingKey.getKey();
                         delete(keyToReinsert);
                         delete(key);
                         insert(root, keyToReinsert);
@@ -148,7 +152,7 @@ public class BTree {
             BNode second) {
         if (targetNode.getElementNum() <= this.order / 2) {
             int keyToReinsert;
-            keyToReinsert = precedingKey != null ? precedingKey.getKey():succeedingKey.getKey();
+            keyToReinsert = precedingKey != null ? precedingKey.getKey() : succeedingKey.getKey();
             delete(keyToReinsert);
             delete(key);
             insert(root, keyToReinsert);
@@ -168,6 +172,7 @@ public class BTree {
         if (previousInBlock != null) previousInBlock.setRight(mergedChild);
         if (nextInBlock != null) nextInBlock.setLeft(mergedChild);
     }
+
     // finds an appropriate element to borrow from another place in the tree
     public int borrowAndDelete(BNode targetNode, int key) {
         BNode trackingNode = targetNode.getKey(key).getRight();
@@ -245,7 +250,7 @@ public class BTree {
         return true;
     }
 
-    //the function recursively merges the passed nodes and the appropriate descendants
+    //the function recursively merges the passed nodes and the relevant descendants
     public BNode mergeBranches(BNode first, BNode second) {
         if (first.isLeaf() && second.isLeaf()) {
             return first.mergeWithNode(second);
