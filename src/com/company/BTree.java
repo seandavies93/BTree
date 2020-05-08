@@ -91,7 +91,7 @@ public class BTree {
     }
 
     public void delete(int key) {
-        BNode parent =root;
+        BNode parent = root;
         BNode targetNode = root;
         while(targetNode.findAppropriateChild(key) != null) {
             parent = targetNode;
@@ -104,7 +104,8 @@ public class BTree {
         BNodeKey precedingKey = parent.getNextSmallestKey(key);
         BNodeKey succeedingKey = parent.getNextLargestKey(key);
         if(targetNode == root) {
-            if(!canMerge(first, second)) { // If we cannot merge the nodes below then we need to try something else
+            if(!canMerge(first, second)) {
+                // If we cannot merge the nodes below then we need to try something else
                 delete(keyToBorrow);
                 oldKey.setKey(keyToBorrow);
             } else {
@@ -122,7 +123,7 @@ public class BTree {
                 // in this case we can simply delete and merge lower nodes where appropriate
                 handleMergeableChildrenInternal(targetNode, precedingKey, succeedingKey, key, first, second);
             } else {
-                // recursively backtrack and attempt to delete a key lower down for the purposes of putting it in the current key's place
+                // backtrack recursively and attempt to delete a key lower down for the purposes of putting it in the current key's place
                 delete(keyToBorrow);
                 oldKey.setKey(keyToBorrow);
             }
@@ -130,6 +131,8 @@ public class BTree {
             if (targetNode.getElementNum() <= this.order / 2) {
                 if (!isLeafAndBorrowFromLeftSibling(parent, key)) { 
                     if(!isLeafAndBorrowFromRightSibling(parent, key)) {
+                        // If these borrow actions cannot be performed then the last course of action is to
+                        // temporarily remove either a preceding or succeeding key such that lower nodes are merged
                         int keyToReinsert;
                         keyToReinsert = precedingKey != null ? precedingKey.getKey() : succeedingKey.getKey();
                         delete(keyToReinsert);
@@ -159,9 +162,8 @@ public class BTree {
         } else {
             targetNode.delete(key);
             BNode mergedChild = null;
-            if(first != null && second != null) {
+            if(first != null && second != null)
                 mergedChild = mergeBranches(first, second);
-            }
             setMergedChildOnLeftoverNodes(targetNode, key, mergedChild);
         }
     }
@@ -200,22 +202,28 @@ public class BTree {
         return sizeAtLeft > sizeAtRight ? keyToBorrowFromLeftSubtree:keyToBorrowFromRightSubtree;
     }
 
+    // We use this to borrow for the succeeding key the smallest item from the right sibling so that the target node has enough items to allow for deletion
+    // We return true if this operation could actually be performed
     public boolean isLeafAndBorrowFromRightSibling(BNode parent, int key) {
         BNodeKey succeedingKey = parent.getNextLargestKey(key);
         boolean success = false;
         if (succeedingKey != null) {
             BNode rightSibling = succeedingKey.getRight();
             if (rightSibling.getElementNum() > this.order / 2) {
-                int itemToRemove = rightSibling.getFirst().getKey();
-                int borrowItem = succeedingKey.getKey();
-                rightSibling.delete(itemToRemove);
-                succeedingKey.setKey(itemToRemove);
-                succeedingKey.getLeft().addKey(borrowItem);
-                succeedingKey.getLeft().delete(key);
+                borrowFromSucceedingKeyAndReplaceWithSmallestRightSibling(succeedingKey, rightSibling, key);
                 success = true;
             }
         }
         return success;
+    }
+
+    public void borrowFromSucceedingKeyAndReplaceWithSmallestRightSibling(BNodeKey succeedingKey, BNode rightSibling, int key) {
+        int itemToRemove = rightSibling.getFirst().getKey();
+        int borrowItem = succeedingKey.getKey();
+        rightSibling.delete(itemToRemove);
+        succeedingKey.setKey(itemToRemove);
+        succeedingKey.getLeft().addKey(borrowItem);
+        succeedingKey.getLeft().delete(key);
     }
 
     public boolean isLeafAndBorrowFromLeftSibling(BNode parent, int key) {
@@ -224,16 +232,20 @@ public class BTree {
         if (precedingKey != null) {
             BNode leftSibling = precedingKey.getLeft();
             if (leftSibling.getElementNum() > this.order / 2) {
-                int itemToRemove = leftSibling.getLast().getKey();
-                int borrowItem = precedingKey.getKey();
-                leftSibling.delete(itemToRemove);
-                precedingKey.setKey(itemToRemove);
-                precedingKey.getRight().addKey(borrowItem);
-                precedingKey.getRight().delete(key);
+                borrowFromPrecedingKeyAndReplaceWithLargestLeftSibling(precedingKey, leftSibling, key);
                 success = true;
             }
         }
         return success;
+    }
+
+    public void borrowFromPrecedingKeyAndReplaceWithLargestLeftSibling(BNodeKey precedingKey, BNode leftSibling, int key) {
+        int itemToRemove = leftSibling.getLast().getKey();
+        int borrowItem = precedingKey.getKey();
+        leftSibling.delete(itemToRemove);
+        precedingKey.setKey(itemToRemove);
+        precedingKey.getRight().addKey(borrowItem);
+        precedingKey.getRight().delete(key);
     }
 
     //this function determines if the appropriate lower branches can be merged
