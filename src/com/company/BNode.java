@@ -132,6 +132,7 @@ public class BNode {
     }
 
     public BNode splitNode(BNodeKey key) {
+        // TODO: check for an orphaning of a node here
         BNode newNode = new BNode(order);
         int index = 0;
         int initialNumElements = elementNum;
@@ -161,6 +162,11 @@ public class BNode {
                 if (!newNode.isLeaf()) newNode.addKeyFromSplit(key);
                 else newNode.addKey(key.getKey());
             }
+        } else {
+            // TODO: possible current fix (after a test I would tentatively say that this was what was required)
+            // this is for the case the the median is that same for two rounds of recursion in insert
+            // we need to manually move over the right node otherwise it gets orphaned in this particular case
+            newNode.getKeyAtIndex(0).setLeft(key.getRight());
         }
         return newNode;
     }
