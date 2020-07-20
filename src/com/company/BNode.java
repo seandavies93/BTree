@@ -28,7 +28,7 @@ public class BNode {
             insertIndex++;
         }
 
-        if (elements[insertIndex].getKey() != -1) {
+        if (elements[insertIndex].notEmptyNodeKey()) {
             for (int i = order - 1; i >= insertIndex + 1; i--) {
                 elements[i].setKey(elements[i - 1].getKey());
                 elements[i].setLeft(elements[i - 1].getLeft());

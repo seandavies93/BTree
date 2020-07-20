@@ -44,4 +44,8 @@ public class BNodeKey {
     public boolean valueLessThanKeyAndWithinBounds(int keyValue) {
         return keyValue > key && key != -1;
     }
+
+    public boolean notEmptyNodeKey() {
+        return key != -1;
+    }
 }
