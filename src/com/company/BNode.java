@@ -182,9 +182,7 @@ public class BNode {
         }
         if (elements[insertIndex].getKey() != -1) {
             for (int i = order - 1; i >= insertIndex + 1; i--) {
-                elements[i].setKey(elements[i - 1].getKey());
-                elements[i].setLeft(elements[i - 1].getLeft());
-                elements[i].setRight(elements[i - 1].getRight());
+                elements[i].updateNodeKey(elements[i - 1]);
             }
         }
         elements[insertIndex] = key;
@@ -202,9 +200,7 @@ public class BNode {
     public void delete(int key) {
         int deleteIndex = this.getIndexOfKey(key);
         for (int i = deleteIndex; i < order - 1; i++) {
-            elements[i].setKey(elements[i + 1].getKey());
-            elements[i].setLeft(elements[i + 1].getLeft());
-            elements[i].setRight(elements[i + 1].getRight());
+            elements[i].updateNodeKey(elements[i + 1]);
         }
         elementNum--;
         for (int i = elementNum; i < order; i++) {
