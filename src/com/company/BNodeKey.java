@@ -40,4 +40,8 @@ public class BNodeKey {
     public void setKey(int key) {
         this.key = key;
     }
+
+    public boolean valueLessThanKeyAndWithinBounds(int keyValue) {
+        return keyValue > key && key != -1;
+    }
 }

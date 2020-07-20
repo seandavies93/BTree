@@ -103,6 +103,7 @@ public class BTree {
         BNode second = oldKey.getRight();
         BNodeKey precedingKey = parent.getNextSmallestKey(key);
         BNodeKey succeedingKey = parent.getNextLargestKey(key);
+
         if(targetNode == root) {
             if(!canMerge(first, second)) {
                 // If we cannot merge the nodes below then we need to try something else

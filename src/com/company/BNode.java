@@ -24,9 +24,10 @@ public class BNode {
             return;
         }
 
-        while (key > elements[insertIndex].getKey() && elements[insertIndex].getKey() != -1) {
+        while (elements[insertIndex].valueLessThanKeyAndWithinBounds(key)) {
             insertIndex++;
         }
+
         if (elements[insertIndex].getKey() != -1) {
             for (int i = order - 1; i >= insertIndex + 1; i--) {
                 elements[i].setKey(elements[i - 1].getKey());
