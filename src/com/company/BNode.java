@@ -204,9 +204,7 @@ public class BNode {
         }
         elementNum--;
         for (int i = elementNum; i < order; i++) {
-            elements[i].setKey(-1);
-            elements[i].setLeft(null);
-            elements[i].setRight(null);
+            elements[i].updateNodeKey(new BNodeKey());
         }
     }
 
