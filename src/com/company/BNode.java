@@ -30,9 +30,7 @@ public class BNode {
 
         if (elements[insertIndex].notEmptyNodeKey()) {
             for (int i = order - 1; i >= insertIndex + 1; i--) {
-                elements[i].setKey(elements[i - 1].getKey());
-                elements[i].setLeft(elements[i - 1].getLeft());
-                elements[i].setRight(elements[i - 1].getRight());
+                elements[i].updateNodeKey(elements[i - 1]);
             }
         }
         elements[insertIndex].setKey(key);
@@ -49,14 +47,12 @@ public class BNode {
             return;
         }
 
-        while (value > elements[insertIndex].getKey() && elements[insertIndex].getKey() != -1) {
+        while (elements[insertIndex].valueLessThanKeyAndWithinBounds(value)) {
             insertIndex++;
         }
         if (elements[insertIndex].getKey() != -1) {
             for (int i = order - 1; i >= insertIndex + 1; i--) {
-                elements[i].setKey(elements[i - 1].getKey());
-                elements[i].setLeft(elements[i - 1].getLeft());
-                elements[i].setRight(elements[i - 1].getRight());
+                elements[i].updateNodeKey(elements[i - 1]);
             }
         }
         elements[insertIndex] = key;

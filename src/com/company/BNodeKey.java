@@ -48,4 +48,10 @@ public class BNodeKey {
     public boolean notEmptyNodeKey() {
         return key != -1;
     }
+
+    public void updateNodeKey(BNodeKey keyToUpdateWith) {
+        setKey(keyToUpdateWith.getKey());
+        setLeft(keyToUpdateWith.getLeft());
+        setRight(keyToUpdateWith.getRight());
+    }
 }
