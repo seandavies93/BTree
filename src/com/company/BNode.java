@@ -50,7 +50,7 @@ public class BNode {
         while (elements[insertIndex].valueLessThanKeyAndWithinBounds(value)) {
             insertIndex++;
         }
-        if (elements[insertIndex].getKey() != -1) {
+        if (elements[insertIndex].notEmptyNodeKey()) {
             for (int i = order - 1; i >= insertIndex + 1; i--) {
                 elements[i].updateNodeKey(elements[i - 1]);
             }
@@ -79,13 +79,13 @@ public class BNode {
     public BNode findAppropriateChild(int key) {
         int index = 0;
         if (isEmpty()) return null;
-        if (elements[0].getKey() > key) {
+        if (elements[0].greaterThan(key)) {
             return elements[0].getLeft();
-        } else if (elements[elementNum - 1].getKey() < key) {
+        } else if (elements[elementNum - 1].lessThan(key)) {
             return elements[elementNum - 1].getRight();
         }
         for (int i = 0; i < elementNum; i++) {
-            if (elements[i].getKey() < key && key < elements[i + 1].getKey()) {
+            if (elements[i].lessThan(key) && elements[i + 1].greaterThan(key)) {
                 return elements[i].getRight();
             }
         }
@@ -114,7 +114,7 @@ public class BNode {
     public int getMedian(int key) {
         int[] keys = new int[order + 1];
         int i = 0;
-        while (elements[i].getKey() < key && i < order) {
+        while (elements[i].lessThan(key) && i < order) {
             keys[i] = elements[i].getKey();
             i++;
             if(i >= order) break;
@@ -134,7 +134,7 @@ public class BNode {
         int index = 0;
         int initialNumElements = elementNum;
         int median = getMedian(key.getKey());
-        while (elements[index].getKey() < median && index < order) {
+        while (elements[index].lessThan(median) && index < order) {
             index++;
             if (index == order) break;
         }
@@ -177,10 +177,10 @@ public class BNode {
             return;
         }
 
-        while (value > elements[insertIndex].getKey() && elements[insertIndex].getKey() != -1) {
+        while (elements[insertIndex].valueLessThanKeyAndWithinBounds(value)) {
             insertIndex++;
         }
-        if (elements[insertIndex].getKey() != -1) {
+        if (elements[insertIndex].notEmptyNodeKey()) {
             for (int i = order - 1; i >= insertIndex + 1; i--) {
                 elements[i].updateNodeKey(elements[i - 1]);
             }
@@ -243,7 +243,7 @@ public class BNode {
 
     public BNodeKey getNextSmallestKey(int key) {
         int i = 0;
-        while (key > elements[i].getKey() && elements[i].getKey() != -1) {
+        while (elements[i].valueLessThanKeyAndWithinBounds(key)) {
             if (i == order - 1) {
                 return elements[i];
             }
@@ -258,13 +258,13 @@ public class BNode {
         int last = elementNum - 1;
         int middle = (first + last) / 2;
         while (last >= first) {
-            if (key < elements[middle].getKey()) {
+            if (elements[middle].greaterThan(key)) {
                 last = middle - 1;
                 middle = (first + last) / 2;
-            } else if (key > elements[middle].getKey()) {
+            } else if (elements[middle].lessThan(key)) {
                 first = middle + 1;
                 middle = (first + last) / 2;
-            } else if (key == elements[middle].getKey()) {
+            } else if (elements[middle].equalTo(key)) {
                 return middle;
             }
         }

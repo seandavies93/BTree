@@ -49,6 +49,18 @@ public class BNodeKey {
         return key != -1;
     }
 
+    public boolean lessThan(int value) {
+        return value > this.key;
+    }
+
+    public boolean greaterThan(int value) {
+        return value < this.key;
+    }
+
+    public boolean equalTo(int value) {
+        return value == this.key;
+    }
+
     public void updateNodeKey(BNodeKey keyToUpdateWith) {
         setKey(keyToUpdateWith.getKey());
         setLeft(keyToUpdateWith.getLeft());
