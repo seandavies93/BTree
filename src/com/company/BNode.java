@@ -98,13 +98,13 @@ public class BNode {
         int last = order - 1;
         int middle = (first + last) / 2;
         while (last > first) {
-            if (key < elements[middle].getKey()) {
+            if (elements[middle].greaterThan(key)) {
                 last = middle - 1;
                 middle = (first + last) / 2;
-            } else if (key > elements[middle].getKey()) {
+            } else if (elements[middle].lessThan(key)) {
                 first = middle + 1;
                 middle = (first + last) / 2;
-            } else if (key == elements[middle].getKey()) {
+            } else if (elements[middle].equalTo(key)) {
                 return true;
             }
         }
@@ -139,7 +139,7 @@ public class BNode {
             if (index == order) break;
         }
         for (int i = index; i < initialNumElements; i++) {
-            if (elements[i].getKey() == median) {
+            if (elements[i].equalTo(median)) {
                 elements[i] = new BNodeKey();
                 this.elementNum--;
             } else {
@@ -191,10 +191,6 @@ public class BNode {
         if (nextSmallest != null) nextSmallest.setRight(key.getLeft());
         BNodeKey nextLargest = this.getNextLargestKey(value);
         if (nextLargest != null) nextLargest.setLeft(key.getRight());
-    }
-
-    public void setElementNum(int elementNum) {
-        this.elementNum = elementNum;
     }
 
     public void delete(int key) {
