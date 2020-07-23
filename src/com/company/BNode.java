@@ -87,25 +87,6 @@ public class BNode {
         return null;
     }
 
-    //used to determine if the node has the specified key
-    public boolean hasKey(int key) {
-        int first = 0;
-        int last = order - 1;
-        int middle = (first + last) / 2;
-        while (last > first) {
-            if (elements[middle].greaterThan(key)) {
-                last = middle - 1;
-                middle = (first + last) / 2;
-            } else if (elements[middle].lessThan(key)) {
-                first = middle + 1;
-                middle = (first + last) / 2;
-            } else if (elements[middle].equalTo(key)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public int getMedian(int key) {
         int[] keys = new int[order + 1];
         int i = 0;
