@@ -41,11 +41,6 @@ public class BNode {
         int insertIndex = 0;
         if (key == null) return;
         int value = key.getKey();
-        if (isEmpty()) {
-            elements[0] = key;
-            elementNum++;
-            return;
-        }
 
         while (elements[insertIndex].valueLessThanKeyAndWithinBounds(value)) {
             insertIndex++;
@@ -171,11 +166,6 @@ public class BNode {
     public void addKeyFromSplit(BNodeKey key) {
         int insertIndex = 0;
         int value = key.getKey();
-        if (isEmpty()) {
-            elements[0] = key;
-            elementNum++;
-            return;
-        }
 
         while (elements[insertIndex].valueLessThanKeyAndWithinBounds(value)) {
             insertIndex++;
