@@ -158,8 +158,16 @@ public class BNode {
         }
         elements[insertIndex] = key;
         elementNum++;
+        setNextLargestIfPresent(value, key);
+        setNextSmallestIfPresent(value, key);
+    }
+
+    public void setNextLargestIfPresent(int value, BNodeKey key) {
         BNodeKey nextSmallest = this.getNextSmallestKey(value);
         if (nextSmallest != null) nextSmallest.setRight(key.getLeft());
+    }
+
+    public void setNextSmallestIfPresent(int value, BNodeKey key) {
         BNodeKey nextLargest = this.getNextLargestKey(value);
         if (nextLargest != null) nextLargest.setLeft(key.getRight());
     }
