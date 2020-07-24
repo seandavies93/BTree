@@ -248,7 +248,7 @@ public class BNode {
     public BNodeKey getKey(int key) {
         int i = 0;
         while (i < order) {
-            if (key == elements[i].getKey()) {
+            if (elements[i].equalTo(key)) {
                 return elements[i];
             }
             i++;
