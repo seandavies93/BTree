@@ -72,7 +72,6 @@ public class BNode {
 
     //finds the appropriate child node to move to given the value
     public BNode findAppropriateChild(int key) {
-        int index = 0;
         if (isEmpty()) return null;
         if (elements[0].greaterThan(key)) {
             return elements[0].getLeft();
