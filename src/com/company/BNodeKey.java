@@ -17,6 +17,14 @@ public class BNodeKey {
         this.key = key;
     }
 
+    BNodeKey(BNode parent, BNodeKey splitFromBelow) {
+        int median = parent.getMedian(splitFromBelow.getKey());
+        BNode rightSplit = parent.splitNode(splitFromBelow);
+        this.leftNode = parent;
+        this.rightNode = rightSplit;
+        this.key = median;
+    }
+
     public void setLeft(BNode left) {
         this.leftNode = left;
     }

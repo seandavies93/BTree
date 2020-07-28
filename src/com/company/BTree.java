@@ -46,17 +46,13 @@ public class BTree {
             BNodeKey splitFromBelow = insert(current, key);
             if (splitFromBelow != null) {
                 if (parent.isFull() && parent == root) {
-                    int median = parent.getMedian(splitFromBelow.getKey());
-                    BNode rightSplit = parent.splitNode(splitFromBelow);
-                    BNodeKey toAdd = new BNodeKey(parent, rightSplit, median);
+                    BNodeKey toAdd = new BNodeKey(parent, splitFromBelow);
                     BNode newRoot = new BNode(order);
                     newRoot.addKeyFromSplit(toAdd);
                     root = newRoot;
                     return null;
                 } else if (parent.isFull()) {
-                    int median = parent.getMedian(splitFromBelow.getKey());
-                    BNode rightSplit = parent.splitNode(splitFromBelow);
-                    BNodeKey toReturn = new BNodeKey(parent, rightSplit, median);
+                    BNodeKey toReturn = new BNodeKey(parent, splitFromBelow);
                     return toReturn;
                 } else {
                     parent.addKeyFromSplit(splitFromBelow);
