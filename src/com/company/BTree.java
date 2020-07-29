@@ -65,9 +65,7 @@ public class BTree {
             if (parent.isFull() && parent == root) {
                 BNodeKey toAdd = new BNodeKey();
                 BNode newRoot = new BNode(order);
-                //int median = parent.getMedian(key);
                 toAdd.setKey(key);
-                //BNode rightSplit = parent.splitNode(toAdd);
                 BNodeKey forRoot = new BNodeKey(parent, toAdd);
                 newRoot.addKeyFromSplit(forRoot);
                 root = newRoot;
