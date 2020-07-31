@@ -63,17 +63,13 @@ public class BTree {
             }
         } else {
             if (parent.isFull() && parent == root) {
-                BNodeKey toAdd = new BNodeKey();
                 BNode newRoot = new BNode(order);
-                toAdd.setKey(key);
-                BNodeKey forRoot = new BNodeKey(parent, toAdd);
+                BNodeKey forRoot = new BNodeKey(parent, key);
                 newRoot.addKeyFromSplit(forRoot);
                 root = newRoot;
                 return null;
             } else if (parent.isFull()) {
-                BNodeKey newKey = new BNodeKey();
-                newKey.setKey(key);
-                BNodeKey toReturn = new BNodeKey(parent, newKey);
+                BNodeKey toReturn = new BNodeKey(parent, key);
                 return toReturn;
             } else {
                 parent.addKey(key);
